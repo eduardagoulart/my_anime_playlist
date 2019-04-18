@@ -30,9 +30,15 @@ class DataProcessing:
         ranking.sort(reverse=True)
         max_value = ranking[0]
         ranking = [value / max_value for value in grade]
-        print(ranking)
         return ranking
+
+    def members(self):
+        members = self.file["members"]
+        popularity = members.copy().tolist()
+        max_value = max(popularity)
+        popularity = [value / max_value for value in members]
+        return popularity
 
 
 if "__main__" == __name__:
-    DataProcessing().grades()
+    DataProcessing().members()
