@@ -5,7 +5,6 @@ class DataProcessing:
     def __init__(self):
         self.file = pd.read_csv("anime.csv")
 
-
     def anime_type(self):
         types = self.file["type"]
         types = [[1 if referential == video_type else 0 for referential in types] for video_type in types]
@@ -25,6 +24,15 @@ class DataProcessing:
         standard = [value / max_value for value in episodes]
         return standard
 
+    def grades(self):
+        grade = self.file['rating']
+        ranking = grade.copy().tolist()
+        ranking.sort(reverse=True)
+        max_value = ranking[0]
+        ranking = [value / max_value for value in grade]
+        print(ranking)
+        return ranking
+
 
 if "__main__" == __name__:
-    DataProcessing().ep()
+    DataProcessing().grades()
