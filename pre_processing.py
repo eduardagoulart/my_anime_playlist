@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 class DataProcessing:
@@ -39,26 +40,41 @@ class DataProcessing:
         popularity = [value / max_value for value in members]
         return popularity
 
+    @staticmethod
+    def vocabulary(vector):
+        return np.array(list(vector))
+
+    @staticmethod
+    def validation(text, words):
+        return [1 if word in text else 0 for word in words]
+
     def genders(self):
         gender = self.file["genre"]
         values = gender.copy().tolist()
         values = [value.split(',') for value in values if type(value) is str]
-        # print(values)
-        print(values[0])
-        print(type(values[500]))
+        # lista = [[[1 if valor in referential else 0 for valor in sub_lista] for sub_lista in values] for referential in
+        #          values]
+        # print(lista[0][0])
+        # print(lista[0][1])
+        a = []
+        for referential in values:
+            for sub_lista in values:
+                for v in sub_lista:
+                    if v in referential:
+                        a.append([referential, sub_lista, v])
+        print(a[0])
         '''
-        f = open("teste.txt", 'w')
+        soma = 0
         for i in values:
-            if type(i) is not 'str':
-                # print(f'i: {i} -> type: {type(i)}')
-                x = str(type(i))
-                y = str(i)
-                f.write(y)
-                f.write(x)
-                f.write('\n')
-                '''
-        # print(type(value))
-        # print(value)
+            for j in values:
+                for k in j:
+                    if k in i:
+                        soma += 1
+                        print(f'lista: {j} -> valor: {k} -> referencial: {i}')
+                lista.append(soma)
+                soma = 0
+        print(soma)
+        '''
 
 
 if "__main__" == __name__:
