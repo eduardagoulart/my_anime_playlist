@@ -39,6 +39,27 @@ class DataProcessing:
         popularity = [value / max_value for value in members]
         return popularity
 
+    def genders(self):
+        gender = self.file["genre"]
+        values = gender.copy().tolist()
+        values = [value.split(',') for value in values if type(value) is str]
+        # print(values)
+        print(values[0])
+        print(type(values[500]))
+        '''
+        f = open("teste.txt", 'w')
+        for i in values:
+            if type(i) is not 'str':
+                # print(f'i: {i} -> type: {type(i)}')
+                x = str(type(i))
+                y = str(i)
+                f.write(y)
+                f.write(x)
+                f.write('\n')
+                '''
+        # print(type(value))
+        # print(value)
+
 
 if "__main__" == __name__:
-    DataProcessing().members()
+    DataProcessing().genders()
