@@ -48,6 +48,14 @@ class DataProcessing:
     def validation(text, words):
         return [1 if word in text else 0 for word in words]
 
+    @staticmethod
+    def cosine_similarity(v, w):
+        return np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w))
+
+    # @TODO: cada lista será um vocabulário em determinado momento
+    def gender_simillarity(self):
+        pass
+
     def genders(self):
         gender = self.file["genre"]
         values = gender.copy().tolist()
