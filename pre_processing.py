@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.metrics.pairwise import euclidean_distances
 
 
 class DataProcessing:
@@ -57,43 +58,20 @@ class DataProcessing:
         gender = self.teste["genre"]
         values = gender.copy().tolist()
         values = [value.split(',') for value in values if type(value) is str]
-        values = [[va.replace(" ", "") for va in value]for value in values]
-        x = [[[1 if word in referential else 0 for word in sub_list] for sub_list in values]for referential in values]
-        # print(f'values: {values[356]} and {values[7819]}')
-        print(x)
-        # print(f'matriz: {x[356]} and {x[7819]}')
-        return [[1 if word in values[0] else 0 for word in sub_list] for sub_list in values]
+        values = [[va.replace(" ", "") for va in value] for value in values]
+        return [[[1 if word in referential else 0 for word in sub_list] for sub_list in values] for referential in
+                values]
 
     def genders(self):
-        gender = self.file["genre"]
-        values = gender.copy().tolist()
-        values = [value.split(',') for value in values if type(value) is str]
-        # lista = [[[1 if valor in referential else 0 for valor in sub_lista] for sub_lista in values] for referential in
-        #          values]
-        # print(lista[0][0])
-        # print(lista[0][1])
-        a = []
-        for referential in values:
-            for sub_lista in values:
-                for v in sub_lista:
-                    if v in referential:
-                        a.append([referential, sub_lista, v])
-        print(a[0])
-        '''
-        soma = 0
-        for i in values:
-            for j in values:
-                for k in j:
-                    if k in i:
-                        soma += 1
-                        print(f'lista: {j} -> valor: {k} -> referencial: {i}')
-                lista.append(soma)
-                soma = 0
-        print(soma)
-        '''
+        # @TODO: definir uma equação matemática para a distância entre dois vetores de tamanhos diferentes
+        tri_matrix = self.fit_transform()
+        matrix = [[euclidean_distances(referential, internal_list) for referential in two_matrix for internal_list in
+                   two_matrix] for two_matrix in tri_matrix]
+        print(matrix[0])
+        return
 
 
 if "__main__" == __name__:
     # DataProcessing().genders()
     o = DataProcessing()
-    o.fit_transform()
+    o.genders()
