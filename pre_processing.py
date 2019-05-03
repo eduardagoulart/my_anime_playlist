@@ -64,9 +64,12 @@ class DataProcessing:
         return final_list
 
     def normalize_gender(self):
+        matrix = self.genders()
+        list_max = [max(internal_list) for internal_list in matrix]
+        return [[matrix[i][j] / list_max[i] for j in range(0, len(matrix[i]))] for i in range(0, len(matrix))]
 
 
 if "__main__" == __name__:
     # DataProcessing().genders()
     o = DataProcessing()
-    o.genders()
+    o.normalize_gender()
