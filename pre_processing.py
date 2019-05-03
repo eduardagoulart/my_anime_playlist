@@ -5,6 +5,7 @@ import numpy as np
 class DataProcessing:
     def __init__(self):
         self.file = pd.read_csv("anime.csv")
+        self.teste = pd.read_csv("base_teste.csv")
 
     def anime_type(self):
         types = self.file["type"]
@@ -49,12 +50,19 @@ class DataProcessing:
         return [1 if word in text else 0 for word in words]
 
     @staticmethod
-    def cosine_similarity(v, w):
+    def cosine_distancy(v, w):
         return np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w))
 
-    # @TODO: cada lista será um vocabulário em determinado momento
-    def gender_simillarity(self):
-        pass
+    def fit_transform(self):
+        gender = self.teste["genre"]
+        values = gender.copy().tolist()
+        values = [value.split(',') for value in values if type(value) is str]
+        values = [[va.replace(" ", "") for va in value]for value in values]
+        x = [[[1 if word in referential else 0 for word in sub_list] for sub_list in values]for referential in values]
+        # print(f'values: {values[356]} and {values[7819]}')
+        print(x)
+        # print(f'matriz: {x[356]} and {x[7819]}')
+        return [[1 if word in values[0] else 0 for word in sub_list] for sub_list in values]
 
     def genders(self):
         gender = self.file["genre"]
@@ -86,4 +94,6 @@ class DataProcessing:
 
 
 if "__main__" == __name__:
-    DataProcessing().genders()
+    # DataProcessing().genders()
+    o = DataProcessing()
+    o.fit_transform()
