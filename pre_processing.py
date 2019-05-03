@@ -42,18 +42,6 @@ class DataProcessing:
         popularity = [value / max_value for value in members]
         return popularity
 
-    @staticmethod
-    def vocabulary(vector):
-        return np.array(list(vector))
-
-    @staticmethod
-    def validation(text, words):
-        return [1 if word in text else 0 for word in words]
-
-    @staticmethod
-    def cosine_distancy(v, w):
-        return np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w))
-
     def fit_transform(self):
         gender = self.teste["genre"]
         values = gender.copy().tolist()
@@ -63,10 +51,8 @@ class DataProcessing:
                 values]
 
     def genders(self):
-        # @TODO: definir uma equação matemática para a distância entre dois vetores de tamanhos diferentes
         tri_matrix = self.fit_transform()
         final_list = []
-        # print(tri_matrix[0])
         for two_matrix in tri_matrix:
             sum_list = []
             for internal_list in two_matrix:
@@ -75,7 +61,9 @@ class DataProcessing:
                     soma += values
                 sum_list.append(soma)
             final_list.append(sum_list)
-        return
+        return final_list
+
+    def normalize_gender(self):
 
 
 if "__main__" == __name__:
