@@ -65,9 +65,16 @@ class DataProcessing:
     def genders(self):
         # @TODO: definir uma equação matemática para a distância entre dois vetores de tamanhos diferentes
         tri_matrix = self.fit_transform()
-        matrix = [[euclidean_distances(referential, internal_list) for referential in two_matrix for internal_list in
-                   two_matrix] for two_matrix in tri_matrix]
-        print(matrix[0])
+        final_list = []
+        # print(tri_matrix[0])
+        for two_matrix in tri_matrix:
+            sum_list = []
+            for internal_list in two_matrix:
+                soma = 0
+                for values in internal_list:
+                    soma += values
+                sum_list.append(soma)
+            final_list.append(sum_list)
         return
 
 
