@@ -1,6 +1,5 @@
 import pandas as pd
-import numpy as np
-from sklearn.metrics.pairwise import euclidean_distances
+import math
 
 
 class DataProcessing:
@@ -33,6 +32,9 @@ class DataProcessing:
         ranking.sort(reverse=True)
         max_value = ranking[0]
         ranking = [value / max_value for value in grade]
+        ranking = [0 if math.isnan(value) else value for value in ranking]
+        print(ranking)
+        print(f'type: {type(ranking[12285])} -> {ranking[12285]}')
         return ranking
 
     def members(self):
@@ -72,4 +74,4 @@ class DataProcessing:
 if "__main__" == __name__:
     # DataProcessing().genders()
     o = DataProcessing()
-    o.normalize_gender()
+    o.grades()
