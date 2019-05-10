@@ -32,10 +32,7 @@ class DataProcessing:
         ranking.sort(reverse=True)
         max_value = ranking[0]
         ranking = [value / max_value for value in grade]
-        ranking = [0 if math.isnan(value) else value for value in ranking]
-        print(ranking)
-        print(f'type: {type(ranking[12285])} -> {ranking[12285]}')
-        return ranking
+        return [0 if math.isnan(value) else value for value in ranking]
 
     def members(self):
         members = self.file["members"]
@@ -47,7 +44,7 @@ class DataProcessing:
     def fit_transform(self):
         gender = self.teste["genre"]
         values = gender.copy().tolist()
-        values = [value.split(',') for value in values if type(value) is str]
+        values = [value.split(',') for value in values]
         values = [[va.replace(" ", "") for va in value] for value in values]
         return [[[1 if word in referential else 0 for word in sub_list] for sub_list in values] for referential in
                 values]
@@ -74,4 +71,4 @@ class DataProcessing:
 if "__main__" == __name__:
     # DataProcessing().genders()
     o = DataProcessing()
-    o.grades()
+    o.fit_transform()
