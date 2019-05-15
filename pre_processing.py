@@ -8,19 +8,20 @@ class DataProcessing:
         self.teste = pd.read_csv("base_teste.csv")
 
     def anime_type(self):
-        types = self.file["type"]
+        types = self.teste["type"]
         types = [[1 if referential == video_type else 0 for referential in types] for video_type in types]
         return types
 
     def ep(self):
         episodes = self.file["episodes"]
+        episodes = episodes.copy()
         for i in range(0, len(episodes)):
             try:
                 episodes[i] = int(episodes[i])
             except:
                 episodes[i] = 0
-        standard = episodes.copy()
-        standard = standard.tolist()
+        # standard = episodes.copy()
+        standard = episodes.tolist()
         standard.sort(reverse=True)
         max_value = standard[0]
         standard = [value / max_value for value in episodes]
@@ -66,9 +67,3 @@ class DataProcessing:
         matrix = self.genders()
         list_max = [max(internal_list) for internal_list in matrix]
         return [[matrix[i][j] / list_max[i] for j in range(0, len(matrix[i]))] for i in range(0, len(matrix))]
-
-
-if "__main__" == __name__:
-    # DataProcessing().genders()
-    o = DataProcessing()
-    o.fit_transform()
