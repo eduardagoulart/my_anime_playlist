@@ -26,9 +26,8 @@ def all_values():
     matrix, list_values = type_gender(), ep_rating_member()
     final_matrix = [[internal_list[i] + list_values[i] for i in range(0, len(internal_list))] for internal_list in
                     matrix]
-    print(f'ep_rating_member: {list_values}')
-    print(f'matrix: {matrix[1]}')
-    print(f'resultado final: {final_matrix[1]}')
+    max_value_list = [max(i) for i in final_matrix]
+    return [[j / max_value_list[i] for j in final_matrix[i]] for i in range(0, len(final_matrix))]
 
 
 if __name__ == '__main__':
