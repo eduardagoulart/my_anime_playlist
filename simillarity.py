@@ -38,6 +38,9 @@ def rating_member():
     return add_id_list(normalize_list(sum_values))
 
 
+'''------------------------------ MATRIX -----------------------------------------------------------'''
+
+
 def type_gender():
     sum_values = [[type_animes[i][j] + gender[i][j] for j in range(0, len(type_animes[i]))] for i in
                   range(0, len(type_animes))]

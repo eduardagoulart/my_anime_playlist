@@ -9,7 +9,7 @@ class DataProcessing:
         self.teste = pd.read_csv("base_teste.csv")
 
     def id_anime(self):
-        return self.teste["anime_id"]
+        return self.file["anime_id"]
 
     @staticmethod
     def cosine_distance(v, w):
@@ -21,7 +21,7 @@ class DataProcessing:
         return types
 
     def ep(self):
-        episodes = self.teste["episodes"]
+        episodes = self.file["episodes"]
         episodes = episodes.copy()
         for i in range(0, len(episodes)):
             try:
@@ -35,7 +35,7 @@ class DataProcessing:
         return standard
 
     def grades(self):
-        grade = self.teste['rating']
+        grade = self.file['rating']
         ranking = grade.copy().tolist()
         ranking.sort(reverse=True)
         max_value = ranking[0]
@@ -43,7 +43,7 @@ class DataProcessing:
         return [0 if math.isnan(value) else value for value in ranking]
 
     def members(self):
-        members = self.teste["members"]
+        members = self.file["members"]
         popularity = members.copy().tolist()
         max_value = max(popularity)
         popularity = [value / max_value for value in members]
