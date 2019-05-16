@@ -8,6 +8,9 @@ class DataProcessing:
         self.file = pd.read_csv("anime.csv")
         self.teste = pd.read_csv("base_teste.csv")
 
+    def id_anime(self):
+        return self.teste["anime_id"]
+
     @staticmethod
     def cosine_distance(v, w):
         return np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w))
