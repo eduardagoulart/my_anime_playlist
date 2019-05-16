@@ -14,28 +14,28 @@ def normalize_list(sum_values):
     return [i / max_value for i in sum_values]
 
 
+def add_id_list(list_values):
+    return [[int(id_anime[i]), list_values[i]] for i in range(0, len(list_values))]
+
+
 def ep_rating_member():
     sum_values = [qt_ep[i] + grades[i] + num_members[i] for i in range(0, len(num_members))]
-    norm = normalize_list(sum_values)
-    return [[int(id_anime[i]), norm[i]] for i in range(0, len(norm))]
+    return add_id_list(normalize_list(sum_values))
 
 
 def ep_rating():
     sum_values = [qt_ep[i] + grades[i] for i in range(0, len(num_members))]
-    norm = normalize_list(sum_values)
-    return [[int(id_anime[i]), norm[i]] for i in range(0, len(norm))]
+    return add_id_list(normalize_list(sum_values))
 
 
 def ep_member():
     sum_values = [qt_ep[i] + num_members[i] for i in range(0, len(num_members))]
-    norm = normalize_list(sum_values)
-    return [[int(id_anime[i]), norm[i]] for i in range(0, len(norm))]
+    return add_id_list(normalize_list(sum_values))
 
 
 def rating_member():
     sum_values = [grades[i] + num_members[i] for i in range(0, len(num_members))]
-    norm = normalize_list(sum_values)
-    return [[int(id_anime[i]), norm[i]] for i in range(0, len(norm))]
+    return add_id_list(normalize_list(sum_values))
 
 
 def type_gender():
@@ -54,4 +54,4 @@ def all_values():
 
 
 if __name__ == '__main__':
-    all_values()
+    print(ep_rating_member())
