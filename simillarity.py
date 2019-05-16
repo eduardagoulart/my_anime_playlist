@@ -6,12 +6,14 @@ qt_ep = obj.ep()
 grades = obj.grades()
 num_members = obj.members()
 gender = obj.normalize_gender().copy()
+id_anime = obj.id_anime()
 
 
 def ep_rating_member():
     sum_values = [qt_ep[i] + grades[i] + num_members[i] for i in range(0, len(num_members))]
     max_value = max(sum_values)
-    return [i / max_value for i in sum_values]
+    norm = [i / max_value for i in sum_values]
+    return [[int(id_anime[i]), norm[i]] for i in range(0, len(norm))]
 
 
 def type_gender():
