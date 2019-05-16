@@ -41,11 +41,14 @@ def rating_member():
 '''------------------------------ MATRIX -----------------------------------------------------------'''
 
 
+def normalize_matrix(sum_values):
+    max_value_list = [max(i) for i in sum_values]
+    return [[j / max_value_list[i] for j in sum_values[i]] for i in range(0, len(sum_values))]
+
+
 def type_gender():
     sum_values = [[type_animes[i][j] + gender[i][j] for j in range(0, len(type_animes[i]))] for i in
                   range(0, len(type_animes))]
-    max_value_list = [max(i) for i in sum_values]
-    return [[j / max_value_list[i] for j in sum_values[i]] for i in range(0, len(sum_values))]
 
 
 def all_values():
