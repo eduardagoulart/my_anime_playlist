@@ -1,5 +1,4 @@
 from pre_processing import DataProcessing
-import sys
 
 obj = DataProcessing()
 type_animes = obj.anime_type()
