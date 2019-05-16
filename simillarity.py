@@ -16,6 +16,21 @@ def ep_rating_member():
     return [[int(id_anime[i]), norm[i]] for i in range(0, len(norm))]
 
 
+def ep_rating():
+    sum_values = [qt_ep[i] + grades[i] for i in range(0, len(num_members))]
+    max_value = max(sum_values)
+    norm = [i / max_value for i in sum_values]
+    return [[int(id_anime[i]), norm[i]] for i in range(0, len(norm))]
+
+
+def ep_member():
+    pass
+
+
+def rating_member():
+    pass
+
+
 def type_gender():
     sum_values = [[type_animes[i][j] + gender[i][j] for j in range(0, len(type_animes[i]))] for i in
                   range(0, len(type_animes))]
