@@ -15,6 +15,12 @@ def ep_rating_member():
     return [i / max_value for i in sum_values]
 
 
+def type_gender():
+    sum_values = [[type_animes[i][j] + gender[i][j] for j in range(0, len(type_animes[i]))] for i in
+                  range(0, len(type_animes))]
+
+
+
 def all_values(ref_id):
     obj = DataProcessing()
     type_animes = obj.anime_type()
@@ -25,4 +31,4 @@ def all_values(ref_id):
 
 
 if __name__ == '__main__':
-    ep_rating_member()
+    type_gender()
