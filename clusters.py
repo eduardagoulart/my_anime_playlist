@@ -20,10 +20,16 @@ def trace_ep_rating(id_ref):
     return [[ad, sim] for ad, sim in simillarity_list if v_min <= sim <= v_max]
 
 
+def trace_type_gender(id_ref):
+    simillarity_matrix = simillarity.type_gender()
+    print(simillarity_matrix)
+    matrix_interval(simillarity_matrix, id_ref)
+
+
 if __name__ == '__main__':
     try:
         id_video = sys.argv[1]
-        print(len(trace_ep_rating(int(id_video))))
-    except:
-        print("Argumento inválido para começar a playlist")
+        trace_type_gender(int(id_video))
+    except Exception as e:
+        print("Argumento inválido")
         exit(404)

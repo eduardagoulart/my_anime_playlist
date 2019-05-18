@@ -46,9 +46,15 @@ def normalize_matrix(sum_values):
     return [[j / max_value_list[i] for j in sum_values[i]] for i in range(0, len(sum_values))]
 
 
+def add_id_matrix(list_values):
+    return [[(int(id_anime[i]), list_values[i][j]) for j in
+             range(0, len(list_values[i]))] for i in range(0, len(list_values))]
+
+
 def type_gender():
     sum_values = [[type_animes[i][j] + gender[i][j] for j in range(0, len(type_animes[i]))] for i in
                   range(0, len(type_animes))]
+    return add_id_matrix(normalize_matrix(sum_values))
 
 
 def all_values():
@@ -60,4 +66,4 @@ def all_values():
 
 
 if __name__ == '__main__':
-    print(ep_rating_member())
+    type_gender()
