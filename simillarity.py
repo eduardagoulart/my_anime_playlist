@@ -47,7 +47,7 @@ def normalize_matrix(sum_values):
 
 
 def add_id_matrix(list_values):
-    return [[(int(id_anime[i]), list_values[i][j]) for j in
+    return [[(int(id_anime[j]), list_values[i][j]) for j in
              range(0, len(list_values[i]))] for i in range(0, len(list_values))]
 
 
