@@ -7,17 +7,20 @@ def list_interval(list_value, id_ref):
     return sim[0] - 0.1, sim[0] + 0.1
 
 
-def trace_ep_rating_member(id_ref):
-    simillarity_list = simillarity.ep_rating_member()
-    v_min, v_max = list_interval(simillarity_list, id_ref)
-    return [[ad, sim] for ad, sim in simillarity_list if v_min <= sim <= v_max]
-
-
-def trace_ep_rating(id_ref):
-    simillarity_list = simillarity.ep_rating()
-    print(len(simillarity_list))
-    v_min, v_max = list_interval(simillarity_list, id_ref)
-    return [[ad, sim] for ad, sim in simillarity_list if v_min <= sim <= v_max]
+def trace_list(param, id_ref):
+    if param == "ep_member":
+        list_simillarity = simillarity.ep_rating_member()
+    elif param == "ep_rating":
+        list_simillarity = simillarity.ep_rating()
+    elif param == "ep_rating_member":
+        list_simillarity = simillarity.ep_rating_member()
+    elif param == "ep_member":
+        list_simillarity = simillarity.ep_member()
+    else:
+        list_simillarity = simillarity.rating_member()
+        
+    v_min, v_max = list_interval(list_simillarity, id_ref)
+    return [[ad, sim] for ad, sim in list_simillarity if v_min <= sim <= v_max]
 
 
 def simillarity_list(matrix, id_ref):
@@ -26,10 +29,8 @@ def simillarity_list(matrix, id_ref):
 
 def trace_type_gender(id_ref):
     simillarity_matrix = simillarity.type_gender()
-    print(simillarity_matrix[20])
     list_sim = simillarity_list(simillarity_matrix, id_ref)
-    list_sim = [i for i in list_sim if i[1] >= 0.4]
-    # print(list_sim)
+    return [i for i in list_sim if i[1] >= 0.9]
 
 
 if __name__ == '__main__':
