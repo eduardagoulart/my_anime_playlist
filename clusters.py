@@ -1,6 +1,5 @@
 import simillarity
 import sys
-import networkx as nx
 
 
 def list_interval(list_value, id_ref):
@@ -31,10 +30,25 @@ def simillarity_list(matrix, id_ref):
 def trace_type_gender(id_ref):
     simillarity_matrix = simillarity.type_gender()
     list_sim = simillarity_list(simillarity_matrix, id_ref)
-    return [i for i in list_sim if i[1] >= 0.9]
+    return [i for i in list_sim if i[1] >= 0.7]
 
 
-def remove_repetidos(lista):
+def playlist(id_ref):
+    simillarity_matrix = simillarity.type_gender()
+    list_sim = simillarity_list(simillarity_matrix, id_ref)
+    list_sim.sort(key=lambda x: x[1], reverse=True)
+    playlist_recomendation = [list_sim[i] for i in range(0, 155)]
+    print(playlist_recomendation)
+    return [list_sim[i] for i in range(0, 155)]
+
+
+def community(id_ref):
+    # :TODO aplicar algoritmo de divisão de comunidade
+    print(trace_type_gender(id_ref))
+    return
+
+
+def remove_repet(lista):
     l = []
     for i in lista:
         if i not in l:
@@ -43,27 +57,11 @@ def remove_repetidos(lista):
     return l
 
 
-def girvan_newman():
-    similarity_matrix = simillarity.type_gender()
-    G = nx.Graph()
-    G.add_nodes_from(simillarity.id_anime)
-    print(f'Grafo :{G.nodes} nodes')
-    adj_list = [sorted([int(adj[0]), int(adj[1])]) for adj in similarity_matrix if
-                float(adj[2]) >= 0.9 and adj[0] != adj[1]]
-    adj_list = remove_repetidos(adj_list)
-
-    for adj in adj_list:
-        G.add_edge(adj[0], adj[1])
-
-    print(f'{G.edges} edges')
-    return
-
-
 if __name__ == '__main__':
     try:
         id_video = sys.argv[1]
         # trace_type_gender(int(id_video))
-        girvan_newman()
-    except Exception as e:
+        playlist(int(id_video))
+    except:
         print("Argumento inválido")
         exit(404)
