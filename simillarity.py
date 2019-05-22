@@ -19,13 +19,11 @@ def add_id_list(list_values):
 
 
 def ep_rating_member():
-    sum_values = [qt_ep[i] + grades[i] + num_members[i] for i in range(0, len(num_members))]
-    return add_id_list(normalize_list(sum_values))
+    return [qt_ep[i] + grades[i] + num_members[i] for i in range(0, len(num_members))]
 
 
 def ep_rating():
-    sum_values = [qt_ep[i] + grades[i] for i in range(0, len(num_members))]
-    return add_id_list(normalize_list(sum_values))
+    return [qt_ep[i] + grades[i] for i in range(0, len(num_members))]
 
 
 def ep_member():
@@ -52,9 +50,8 @@ def add_id_matrix(list_values):
 
 
 def type_gender():
-    sum_values = [[type_animes[i][j] + gender[i][j] for j in range(0, len(type_animes[i]))] for i in
-                  range(0, len(type_animes))]
-    return add_id_matrix(normalize_matrix(sum_values))
+    return [[type_animes[i][j] + gender[i][j] for j in range(0, len(type_animes[i]))] for i in
+            range(0, len(type_animes))]
 
 
 def all_values():
@@ -65,5 +62,27 @@ def all_values():
     return [[j / max_value_list[i] for j in final_matrix[i]] for i in range(0, len(final_matrix))]
 
 
+def all_values_with_id():
+    values = all_values()
+    return add_id_matrix(values)
+
+
+def write_file_weigth_matrix():
+    values = all_values_with_id()
+    weight = open("weight.txt", "w")
+    for ref in range(0, len(values)):
+        for ultimo in values[ref]:
+            pass
+            # print(ultimo)
+            # print(ultimo[ref])
+            weight.write(str(values[ref][ref][0]))
+            weight.write(" ")
+            weight.write(str(ultimo[0]))
+            weight.write(str(" "))
+            weight.write(str(ultimo[1]))
+            weight.write("\n")
+    weight.close()
+
+
 if __name__ == '__main__':
-    type_gender()
+    write_file_weigth_matrix()
