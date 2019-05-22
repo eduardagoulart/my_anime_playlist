@@ -1,5 +1,6 @@
 import simillarity
 import sys
+import igraph
 
 
 def list_interval(list_value, id_ref):
@@ -33,19 +34,34 @@ def trace_type_gender(id_ref):
     return [i for i in list_sim if i[1] >= 0.7]
 
 
-def playlist(id_ref):
+def playlist(id_ref=20):
     simillarity_matrix = simillarity.type_gender()
     list_sim = simillarity_list(simillarity_matrix, id_ref)
     list_sim.sort(key=lambda x: x[1], reverse=True)
-    playlist_recomendation = [list_sim[i] for i in range(0, 155)]
-    print(playlist_recomendation)
     return [list_sim[i] for i in range(0, 155)]
 
 
-def community(id_ref):
-    # :TODO aplicar algoritmo de divisão de comunidade
-    print(trace_type_gender(id_ref))
-    return
+def trace_route():
+    file = open('weight.txt', 'r')
+    file = file.read().split("\n")
+    file = [i.split(" ") for i in file]
+    file.pop()
+
+    adj_list = [(adj[0], adj[1], float(adj[2])) for adj in file if
+                float(adj[2]) >= 0.9 and adj[0] != adj[1]]
+
+    return remove_repet(adj_list)
+
+
+def clustering_multilevel():
+    graph = igraph.Graph.TupleList(trace_route(), weights=True)
+    # graph.vs["label"] = list(map(lambda x: x, open('nodes.txt', 'r')))
+    visual_style = {"vertex_size": 20, "bbox": (600, 600), "margin": 20}
+    member = graph.community_multilevel(weights=None, return_levels=False)
+    print(member)
+    igraph.plot(member, **visual_style)
+    # graph.add_vertices('nodes.txt')
+    # graph.add_edges(trace_route())
 
 
 def remove_repet(lista):
@@ -58,10 +74,13 @@ def remove_repet(lista):
 
 
 if __name__ == '__main__':
+    clustering_multilevel()
+    '''
     try:
         id_video = sys.argv[1]
         # trace_type_gender(int(id_video))
-        playlist(int(id_video))
+        community()
     except:
         print("Argumento inválido")
         exit(404)
+        '''
