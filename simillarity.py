@@ -70,6 +70,7 @@ def all_values_with_id():
 def write_file_weigth_matrix():
     values = all_values_with_id()
     weight = open("weight.txt", "w")
+    nodes = open('nodes.txt', 'w')
     for ref in range(0, len(values)):
         for ultimo in values[ref]:
             pass
@@ -81,7 +82,10 @@ def write_file_weigth_matrix():
             weight.write(str(" "))
             weight.write(str(ultimo[1]))
             weight.write("\n")
+        nodes.write(str(values[ref][ref][0]))
+        nodes.write('\n')
     weight.close()
+    nodes.close()
 
 
 if __name__ == '__main__':
