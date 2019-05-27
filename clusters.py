@@ -48,20 +48,19 @@ def trace_route():
     file.pop()
 
     adj_list = [(adj[0], adj[1], float(adj[2])) for adj in file if
-                float(adj[2]) >= 0.9 and adj[0] != adj[1]]
+                float(adj[2]) >= 0.75 and adj[0] != adj[1]]
 
     return remove_repet(adj_list)
 
 
 def clustering_multilevel():
     graph = igraph.Graph.TupleList(trace_route(), weights=True)
-    # graph.vs["label"] = list(map(lambda x: x, open('nodes.txt', 'r')))
     visual_style = {"vertex_size": 20, "bbox": (600, 600), "margin": 20}
     member = graph.community_multilevel(weights=None, return_levels=False)
-    print(member)
-    igraph.plot(member, **visual_style)
+    igraph.plot(member, 'save.png', **visual_style)
     # graph.add_vertices('nodes.txt')
     # graph.add_edges(trace_route())
+    return
 
 
 def remove_repet(lista):
