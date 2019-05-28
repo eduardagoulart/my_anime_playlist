@@ -12,7 +12,7 @@ df = pd.DataFrame(data, index=['user_id', 'anime_id', 'rating'])
 
 df_filter = {}
 for i in anime_id:
-    df_filter[i] = [(df.user_id == i)]
+    df_filter[i] = [df[df['user_id']] == i]
 
 print(df_filter)
 

@@ -42,7 +42,7 @@ def playlist(id_ref=20):
 
 
 def trace_route():
-    file = open('weight2.txt', 'r')
+    file = open('weight.txt', 'r')
     file = file.read().split("\n")
     file = [i.split(" ") for i in file]
     file.pop()
@@ -54,14 +54,24 @@ def trace_route():
 
 
 def clustering_multilevel():
-    graph = igraph.Graph.Read_Ncol("weight.txt", names=True, directed=False)
+    graph = igraph.Graph.TupleList(trace_route(), weights=True, vertex_name_attr=True)
+    nodes_name = open('nodes.txt', "r")
+    nodes_name = nodes_name.read().split("\n")
+    # nodes_name = [i.split(" ") for i in nodes_name]
+    nodes_name.pop()
+    print(nodes_name)
+    # graph = igraph.Graph.Read_Ncol("weight.txt", names=True, directed=False)
     # graph = igraph.Graph()
     # graph.add_vertices('nodes.txt')
-    visual_style = {"vertex_size": 20, "bbox": (600, 600), "margin": 20}
+    visual_style = {
+        "vertex_size": 20,
+        "bbox": (600, 600),
+        "margin": 20,
+        "vertex_label": nodes_name
+    }
     member = graph.community_multilevel(weights=None, return_levels=False)
-    print(graph)
-    igraph.plot(graph, 'graph.png', **visual_style)
-    # graph = igraph.Graph.TupleList(trace_route(), weights=True, vertex_name_attr='name')
+    # print(member)
+    igraph.plot(member, 'graph.png', **visual_style)
     # igraph.plot(member, file + '.png', **visual_style)
     return
 
