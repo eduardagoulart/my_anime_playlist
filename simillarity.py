@@ -74,8 +74,6 @@ def write_file_weigth_matrix():
     for ref in range(0, len(values)):
         for ultimo in values[ref]:
             pass
-            # print(ultimo)
-            # print(ultimo[ref])
             weight.write(str(values[ref][ref][0]))
             weight.write(" ")
             weight.write(str(ultimo[0]))
