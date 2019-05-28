@@ -42,24 +42,27 @@ def playlist(id_ref=20):
 
 
 def trace_route():
-    file = open('weight.txt', 'r')
+    file = open('weight2.txt', 'r')
     file = file.read().split("\n")
     file = [i.split(" ") for i in file]
     file.pop()
 
-    adj_list = [(adj[0], adj[1], float(adj[2])) for adj in file if
-                float(adj[2]) >= 0.75 and adj[0] != adj[1]]
+    adj_list = [(adj[0], adj[1]) for adj in file if
+                float(adj[2]) >= 0.9 and adj[0] != adj[1]]
 
     return remove_repet(adj_list)
 
 
 def clustering_multilevel():
-    graph = igraph.Graph.TupleList(trace_route(), weights=True)
+    graph = igraph.Graph.Read_Ncol("weight.txt", names=True, directed=False)
+    # graph = igraph.Graph()
+    # graph.add_vertices('nodes.txt')
     visual_style = {"vertex_size": 20, "bbox": (600, 600), "margin": 20}
     member = graph.community_multilevel(weights=None, return_levels=False)
-    igraph.plot(member, 'save.png', **visual_style)
-    # graph.add_vertices('nodes.txt')
-    # graph.add_edges(trace_route())
+    print(graph)
+    igraph.plot(graph, 'graph.png', **visual_style)
+    # graph = igraph.Graph.TupleList(trace_route(), weights=True, vertex_name_attr='name')
+    # igraph.plot(member, file + '.png', **visual_style)
     return
 
 
