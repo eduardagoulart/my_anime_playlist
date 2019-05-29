@@ -73,13 +73,16 @@ def write_file_weigth_matrix():
     nodes = open('nodes.txt', 'w')
     for ref in range(0, len(values)):
         for ultimo in values[ref]:
-            pass
+            t = f'{str(values[ref][ref][0]): <10}{str(ultimo[0]): <5}{str(ultimo[1])}'
+            '''
             weight.write(str(values[ref][ref][0]))
             weight.write(" ")
             weight.write(str(ultimo[0]))
             weight.write(str(" "))
             weight.write(str(ultimo[1]))
-            weight.write("\n")
+            weight.write("\n")'''
+        weight.write(t)
+        weight.write('\n')
         nodes.write(str(values[ref][ref][0]))
         nodes.write('\n')
     weight.close()
