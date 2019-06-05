@@ -54,6 +54,11 @@ def type_gender():
             range(0, len(type_animes))]
 
 
+def type_gender_id():
+    values = type_gender()
+    return add_id_matrix(values)
+
+
 def all_values():
     matrix, list_values = type_gender(), ep_rating_member()
     final_matrix = [[internal_list[i] + list_values[i] for i in range(0, len(internal_list))] for internal_list in
@@ -69,11 +74,14 @@ def all_values_with_id():
 
 def write_file_weigth_matrix():
     values = all_values_with_id()
-    weight = open("weight.txt", "w")
-    nodes = open('nodes.txt', 'w')
+    # values = type_gender_id()
+    weight = open("type_gender.txt", "w")
     for ref in range(0, len(values)):
         for ultimo in values[ref]:
-            t = f'{str(values[ref][ref][0]): <10}{str(ultimo[0]): <5}{str(ultimo[1])}'
+            if ultimo[1] >= 0.9:
+                t = f'{str(values[ref][ref][0]): <6}{str(ultimo[0]): <6}1'
+                weight.write(t)
+                weight.write('\n')
             '''
             weight.write(str(values[ref][ref][0]))
             weight.write(" ")
@@ -81,12 +89,7 @@ def write_file_weigth_matrix():
             weight.write(str(" "))
             weight.write(str(ultimo[1]))
             weight.write("\n")'''
-        weight.write(t)
-        weight.write('\n')
-        nodes.write(str(values[ref][ref][0]))
-        nodes.write('\n')
     weight.close()
-    nodes.close()
 
 
 if __name__ == '__main__':

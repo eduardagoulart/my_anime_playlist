@@ -2,7 +2,7 @@ import csv
 
 
 def read():
-    with open('another_way/rating.csv') as csvfile:
+    with open('rating.csv') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         data_user = [row for row in spamreader]
 

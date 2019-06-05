@@ -55,19 +55,19 @@ def trace_route():
 
 def clustering_multilevel():
     graph = igraph.Graph.TupleList(trace_route(), weights=True, vertex_name_attr=True)
+    graph = graph.layout("kk")
     nodes_name = open('nodes.txt', "r")
     nodes_name = nodes_name.read().split("\n")
     # nodes_name = [i.split(" ") for i in nodes_name]
     nodes_name.pop()
     print(nodes_name)
-    # graph = igraph.Graph.Read_Ncol("weight.txt", names=True, directed=False)
-    # graph = igraph.Graph()
-    # graph.add_vertices('nodes.txt')
+
     visual_style = {
         "vertex_size": 20,
         "bbox": (600, 600),
         "margin": 20,
-        "vertex_label": nodes_name
+        "vertex_label": nodes_name,
+        'layout': 'dlr'
     }
     member = graph.community_multilevel(weights=None, return_levels=False)
     # print(member)

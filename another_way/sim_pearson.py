@@ -3,8 +3,9 @@ from math import sqrt
 
 def sim(users, p1, p2):
     # p1, p2 = int(p1), int(p2)
-    print(type(p1))
+    
     print(users[p1])
+    print(users[p2])
     si = {}
     for item in users[p1]:
         if item in users[p2]:
@@ -14,10 +15,13 @@ def sim(users, p1, p2):
 
     if qtd_sim == 0:
         return 0
-
-    sum1 = sum([users[p1][item] for item in si])
-    sum2 = sum([users[p2][item] for item in si])
-
+    print(f'Dicionário de similaridade: {si}')
+    try:
+        sum1 = sum([users[p1][item] for item in si])
+        sum2 = sum([users[p2][item] for item in si])
+    except:
+        sum1 = users[p1][1]
+        sum2 = users[p2][1]
     squares_sum1 = sum([pow(users[p1][item], 2) for item in si])
     squares_sum2 = sum([pow(users[p2][item], 2) for item in si])
 
