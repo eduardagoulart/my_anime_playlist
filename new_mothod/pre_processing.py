@@ -32,15 +32,16 @@ class DataProcessing:
                 episodes[i] = 0
         standard = episodes.tolist()
         print(standard)
-        '''
-        x = np.random.randn(len(standard))
-        plt.hist(x, 50, normed=1, facecolor='green', alpha=0.75)
-        plt.axis(len(standard))
-        plt.xlabel("Número do anime")
-        plt.ylabel('Quantidade de epsódios')
-        plt.grid(True)'''
+        print(f'MAX : {max(standard)}')
+        print(standard.count(0))
 
-        plt.plot(standard)
+        occurrence = {}
+        for i in standard:
+            occurrence[i] = standard.count(i)
+
+        occurrence = [occurrence[i] for i in occurrence.keys()]
+
+        x = plt.plot(standard)
         plt.show()
         return
 
