@@ -31,7 +31,6 @@ class DataProcessing:
                 eps[i] = (id_anime[i], int(episodes[i]))
             except:
                 eps[i] = (id_anime[i], 0)
-        # standard = episodes.tolist()
 
         # occurrence = {}
         # for i in standard:
@@ -42,7 +41,6 @@ class DataProcessing:
         # plt.plot(standard)
         # plt.show()
         class_division = {"A": [], "B": [], "C": [], "D": [], "E": []}
-        print(f'eps: {eps}')
 
         for i in eps.keys():
             if 0 <= eps[i][1] <= 50:
@@ -55,25 +53,57 @@ class DataProcessing:
                 class_division["D"].append(eps[i])
             else:
                 class_division["E"].append(eps[i])
-        print(class_division)
-        return
+        return class_division
 
     def grades(self):
         grade = self.file['rating']
-        ranking = grade.copy().tolist()
-        ranking.sort(reverse=True)
-        max_value = ranking[0]
-        ranking = [value / max_value for value in grade]
-        return [0 if math.isnan(value) else value for value in ranking]
+        id_anime = self.id_anime()
+        ranking = {}
+        for i in range(0, len(grade)):
+            try:
+                ranking[i] = (id_anime[i], int(grade[i]))
+            except:
+                ranking[i] = (id_anime[i], 0)
+
+        class_division = {"A": [], "B": [], "C": [], "D": [], "E": []}
+
+        for i in ranking.keys():
+            if 0 <= ranking[i][1] <= 2:
+                class_division["A"].append(ranking[i])
+            elif 2 < ranking[i][1] <= 4:
+                class_division["B"].append(ranking[i])
+            elif 4 < ranking[i][1] <= 6:
+                class_division["C"].append(ranking[i])
+            elif 6 < ranking[i][1] <= 8:
+                class_division["D"].append(ranking[i])
+            elif 8 < ranking[i][1] <= 10:
+                class_division["E"].append(ranking[i])
+
+        return class_division
 
     def members(self):
         members = self.file["members"]
-        popularity = members.copy().tolist()
-        max_value = max(popularity)
-        popularity = [value / max_value for value in members]
-        print(popularity)
-        return popularity
+
+        class_division = {"A": [], "B": [], "C": [], "D": [], "E": []}
+
+        for i in members.keys():
+            if 5 <= members[i] <= 1000:
+                class_division["A"].append(members[i])
+            elif 1000 < members[i] <= 50000:
+                class_division["B"].append(members[i])
+            elif 50000 < members[i] <= 100000:
+                class_division["C"].append(members[i])
+            elif 100000 < members[i] <= 500000:
+                class_division["D"].append(members[i])
+            else:
+                class_division["E"].append(members[i])
+
+        plt.plot(members)
+        plt.ylabel("Quantidade de membros")
+        plt.xlabel("Quantidade de animes")
+        plt.show()
+        return class_division
 
 
 if __name__ == '__main__':
-    DataProcessing().ep()
+    DataProcessing().grades()
