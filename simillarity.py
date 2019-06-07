@@ -64,7 +64,8 @@ def all_values():
     final_matrix = [[internal_list[i] + list_values[i] for i in range(0, len(internal_list))] for internal_list in
                     matrix]
     max_value_list = [max(i) for i in final_matrix]
-    return [[j / max_value_list[i] for j in final_matrix[i]] for i in range(0, len(final_matrix))]
+    max_value = max(max_value_list)
+    return [[j / max_value for j in final_matrix[i]] for i in range(0, len(final_matrix))]
 
 
 def all_values_with_id():
@@ -74,7 +75,9 @@ def all_values_with_id():
 
 def write_file_weigth_matrix():
     values = all_values_with_id()
+    # print(values)
     # values = type_gender_id()
+
     weight = open("type_gender.txt", "w")
     for ref in range(0, len(values)):
         for ultimo in values[ref]:
@@ -82,8 +85,8 @@ def write_file_weigth_matrix():
                 t = f'{str(values[ref][ref][0]): <6}{str(ultimo[0]): <6}1'
                 weight.write(t)
                 weight.write('\n')
-            '''
-            weight.write(str(values[ref][ref][0]))
+            
+            '''weight.write(str(values[ref][ref][0]))
             weight.write(" ")
             weight.write(str(ultimo[0]))
             weight.write(str(" "))

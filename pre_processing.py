@@ -17,6 +17,7 @@ class DataProcessing:
 
     def anime_type(self):
         types = self.teste["type"]
+        print(types[5])
         types = [[1 if referential == video_type else 0 for referential in types] for video_type in types]
         return types
 
@@ -47,6 +48,7 @@ class DataProcessing:
         popularity = members.copy().tolist()
         max_value = max(popularity)
         popularity = [value / max_value for value in members]
+        print(popularity)
         return popularity
 
     def fit_transform(self):
@@ -73,8 +75,9 @@ class DataProcessing:
     def normalize_gender(self):
         matrix = self.genders()
         list_max = [max(internal_list) for internal_list in matrix]
-        return [[matrix[i][j] / list_max[i] for j in range(0, len(matrix[i]))] for i in range(0, len(matrix))]
+        max_value = max(list_max)
+        return [[matrix[i][j] / max_value for j in range(0, len(matrix[i]))] for i in range(0, len(matrix))]
 
 
 if __name__ == '__main__':
-    DataProcessing().anime_type()
+    DataProcessing().members()
