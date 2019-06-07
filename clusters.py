@@ -54,8 +54,9 @@ def trace_route():
 
 
 def clustering_multilevel():
-    file = open('weight.txt', 'r')
+    file = open('type_gender.txt', 'r')
     file = file.read().split("\n")
+    print(f'tamanho do arquivo: {len(file)}')
     edge = [i.split(" ") for i in file]
     edge = [[j for j in i if j != ""] for i in edge]
     edge.pop()
@@ -67,9 +68,9 @@ def clustering_multilevel():
 
     graph = igraph.Graph()
     graph.add_vertices(nodes)
-    print(graph.vs())
     graph.add_edges(edge)
-    print(graph)
+    # print(len(edge))
+    print(f'Quantidade de arestas inseridas: {graph.ecount()}')
     graph = graph.layout("kk")
 
     visual_style = {
@@ -96,12 +97,3 @@ def remove_repet(lista):
 
 if __name__ == '__main__':
     clustering_multilevel()
-    '''
-    try:
-        id_video = sys.argv[1]
-        # trace_type_gender(int(id_video))
-        community()
-    except:
-        print("Argumento inválido")
-        exit(404)
-        '''

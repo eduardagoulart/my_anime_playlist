@@ -8,6 +8,11 @@ num_members = obj.members()
 gender = obj.normalize_gender().copy()
 id_anime = obj.id_anime()
 
+nodes = open('nodes.txt', 'w')
+for i in id_anime:
+    nodes.write(str(i))
+    nodes.write('\n')
+
 
 def normalize_list(sum_values):
     max_value = max(sum_values)
@@ -86,7 +91,7 @@ def write_file_weigth_matrix():
                 weight.write(t)
                 weight.write('\n')
             
-            '''weight.write(str(values[ref][ref][0]))
+        '''weight.write(str(values[ref][ref][0]))
             weight.write(" ")
             weight.write(str(ultimo[0]))
             weight.write(str(" "))
