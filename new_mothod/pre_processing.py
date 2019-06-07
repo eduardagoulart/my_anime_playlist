@@ -24,25 +24,38 @@ class DataProcessing:
 
     def ep(self):
         episodes = self.file["episodes"]
-        episodes = episodes.copy()
+        id_anime = self.id_anime()
+        eps = {}
         for i in range(0, len(episodes)):
             try:
-                episodes[i] = int(episodes[i])
+                eps[i] = (id_anime[i], int(episodes[i]))
             except:
-                episodes[i] = 0
-        standard = episodes.tolist()
-        print(standard)
-        print(f'MAX : {max(standard)}')
-        print(standard.count(0))
+                eps[i] = (id_anime[i], 0)
+        # standard = episodes.tolist()
 
-        occurrence = {}
-        for i in standard:
-            occurrence[i] = standard.count(i)
+        # occurrence = {}
+        # for i in standard:
+        #     occurrence[i] = standard.count(i)
 
-        occurrence = [occurrence[i] for i in occurrence.keys()]
+        # occurrence = [occurrence[i] for i in occurrence.keys()]
 
-        x = plt.plot(standard)
-        plt.show()
+        # plt.plot(standard)
+        # plt.show()
+        class_division = {"A": [], "B": [], "C": [], "D": [], "E": []}
+        print(f'eps: {eps}')
+
+        for i in eps.keys():
+            if 0 <= eps[i][1] <= 50:
+                class_division["A"].append(eps[i])
+            elif 51 <= eps[i][1] <= 110:
+                class_division["B"].append(eps[i])
+            elif 111 <= eps[i][1] <= 800:
+                class_division["C"].append(eps[i])
+            elif 801 <= eps[i][1] <= 1200:
+                class_division["D"].append(eps[i])
+            else:
+                class_division["E"].append(eps[i])
+        print(class_division)
         return
 
     def grades(self):
