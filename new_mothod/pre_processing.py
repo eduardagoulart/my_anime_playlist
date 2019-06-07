@@ -40,19 +40,19 @@ class DataProcessing:
 
         # plt.plot(standard)
         # plt.show()
-        class_division = {"A": [], "B": [], "C": [], "D": [], "E": []}
+        class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
 
         for i in eps.keys():
             if 0 <= eps[i][1] <= 50:
-                class_division["A"].append(eps[i])
+                class_division[1].append(eps[i])
             elif 51 <= eps[i][1] <= 110:
-                class_division["B"].append(eps[i])
+                class_division[2].append(eps[i])
             elif 111 <= eps[i][1] <= 800:
-                class_division["C"].append(eps[i])
+                class_division[3].append(eps[i])
             elif 801 <= eps[i][1] <= 1200:
-                class_division["D"].append(eps[i])
+                class_division[4].append(eps[i])
             else:
-                class_division["E"].append(eps[i])
+                class_division[5].append(eps[i])
         return class_division
 
     def grades(self):
@@ -65,38 +65,38 @@ class DataProcessing:
             except:
                 ranking[i] = (id_anime[i], 0)
 
-        class_division = {"A": [], "B": [], "C": [], "D": [], "E": []}
+        class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
 
         for i in ranking.keys():
             if 0 <= ranking[i][1] <= 2:
-                class_division["A"].append(ranking[i])
+                class_division[1].append(ranking[i])
             elif 2 < ranking[i][1] <= 4:
-                class_division["B"].append(ranking[i])
+                class_division[2].append(ranking[i])
             elif 4 < ranking[i][1] <= 6:
-                class_division["C"].append(ranking[i])
+                class_division[3].append(ranking[i])
             elif 6 < ranking[i][1] <= 8:
-                class_division["D"].append(ranking[i])
+                class_division[4].append(ranking[i])
             elif 8 < ranking[i][1] <= 10:
-                class_division["E"].append(ranking[i])
-
+                class_division[5].append(ranking[i])
+        print(class_division)
         return class_division
 
     def members(self):
         members = self.file["members"]
 
-        class_division = {"A": [], "B": [], "C": [], "D": [], "E": []}
+        class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
 
         for i in members.keys():
             if 5 <= members[i] <= 1000:
-                class_division["A"].append(members[i])
+                class_division[1].append(members[i])
             elif 1000 < members[i] <= 50000:
-                class_division["B"].append(members[i])
+                class_division[2].append(members[i])
             elif 50000 < members[i] <= 100000:
-                class_division["C"].append(members[i])
+                class_division[3].append(members[i])
             elif 100000 < members[i] <= 500000:
-                class_division["D"].append(members[i])
+                class_division[4].append(members[i])
             else:
-                class_division["E"].append(members[i])
+                class_division[5].append(members[i])
 
         plt.plot(members)
         plt.ylabel("Quantidade de membros")
