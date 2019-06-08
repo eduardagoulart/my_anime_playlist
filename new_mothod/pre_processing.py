@@ -1,13 +1,14 @@
 import pandas as pd
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 class DataProcessing:
+    valid_animes = []
+
     def __init__(self):
         self.file = pd.read_csv("anime.csv")
-        self.teste = pd.read_csv("base_teste.csv")
+        self.valid_animes = []
 
     def id_anime(self):
         return self.file["anime_id"]
@@ -18,12 +19,12 @@ class DataProcessing:
 
     def anime_type(self):
         types = self.teste["type"]
-        print(types[5])
         types = [[1 if referential == video_type else 0 for referential in types] for video_type in types]
         return types
 
     def ep(self):
         episodes = self.file["episodes"]
+        print(self.valid_animes)
         id_anime = self.id_anime()
         eps = {}
         for i in range(0, len(episodes)):
@@ -104,6 +105,38 @@ class DataProcessing:
         plt.show()
         return class_division
 
+    def fit_transform(self):
+        gender = self.file["genre"]
+        id_anime = self.file["anime_id"]
+        values = gender.copy().tolist()
+        list_gender = []
+        for i in range(0, len(values)):
+            try:
+                list_gender.append((id_anime[i], values[i].split(",")))
+            except:
+                pass
+
+        return [[(value[0], va.replace(" ", "")) for va in value[1]] for value in list_gender], [value[0] for value in
+                                                                                                 list_gender]
+
+    def genders(self):
+
+        gender_list, _ = self.fit_transform()
+        tri_matrix = [[[1 if word in referential else 0 for word in sub_list] for sub_list in gender_list] for
+                      referential in
+                      gender_list]
+        final_list = []
+        for two_matrix in tri_matrix:
+            sum_list = []
+            for internal_list in two_matrix:
+                soma = 0
+                for values in internal_list:
+                    soma += values
+                sum_list.append(soma)
+            final_list.append(sum_list)
+        print(final_list)
+        return final_list
+
 
 if __name__ == '__main__':
-    DataProcessing().grades()
+    DataProcessing().fit_transform()
