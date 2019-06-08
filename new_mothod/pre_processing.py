@@ -4,34 +4,59 @@ import matplotlib.pyplot as plt
 
 
 class DataProcessing:
-    valid_animes = []
 
     def __init__(self):
         self.file = pd.read_csv("anime.csv")
-        self.valid_animes = []
 
-    def id_anime(self):
-        return self.file["anime_id"]
+    def fit_transform(self):
+        gender = self.file["genre"]
+        id_anime = self.file["anime_id"]
+        values = gender.copy().tolist()
+        list_gender = []
+        for i in range(0, len(values)):
+            try:
+                list_gender.append((id_anime[i], values[i].split(",")))
+            except:
+                pass
 
-    @staticmethod
-    def cosine_distance(v, w):
-        return np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w))
+        return [[(value[0], va.replace(" ", "")) for va in value[1]] for value in list_gender], [value[0] for value in
+                                                                                                 list_gender]
 
+    # @TODO: testar a saída dessa função: killed
+    def genders(self):
+        gender_list, _ = self.fit_transform()
+        tri_matrix = [[[1 if word in referential else 0 for word in sub_list] for sub_list in gender_list] for
+                      referential in
+                      gender_list]
+        final_list = []
+        for two_matrix in tri_matrix:
+            sum_list = []
+            for internal_list in two_matrix:
+                soma = 0
+                for values in internal_list:
+                    soma += values
+                sum_list.append(soma)
+            final_list.append(sum_list)
+        print(final_list)
+        return final_list
+
+    # @TODO: analisar se esta informação é útil e como testar
     def anime_type(self):
-        types = self.teste["type"]
+        types = self.file["type"]
         types = [[1 if referential == video_type else 0 for referential in types] for video_type in types]
         return types
 
     def ep(self):
         episodes = self.file["episodes"]
-        print(self.valid_animes)
-        id_anime = self.id_anime()
+        id_anime = self.file["anime_id"]
+        _, valid_animes = self.fit_transform()
         eps = {}
         for i in range(0, len(episodes)):
-            try:
-                eps[i] = (id_anime[i], int(episodes[i]))
-            except:
-                eps[i] = (id_anime[i], 0)
+            if id_anime[i] in valid_animes:
+                try:
+                    eps[i] = (id_anime[i], int(episodes[i]))
+                except:
+                    eps[i] = (id_anime[i], 0)
 
         # occurrence = {}
         # for i in standard:
@@ -54,6 +79,7 @@ class DataProcessing:
                 class_division[4].append(eps[i])
             else:
                 class_division[5].append(eps[i])
+        print(class_division)
         return class_division
 
     def grades(self):
@@ -105,38 +131,6 @@ class DataProcessing:
         plt.show()
         return class_division
 
-    def fit_transform(self):
-        gender = self.file["genre"]
-        id_anime = self.file["anime_id"]
-        values = gender.copy().tolist()
-        list_gender = []
-        for i in range(0, len(values)):
-            try:
-                list_gender.append((id_anime[i], values[i].split(",")))
-            except:
-                pass
-
-        return [[(value[0], va.replace(" ", "")) for va in value[1]] for value in list_gender], [value[0] for value in
-                                                                                                 list_gender]
-
-    def genders(self):
-
-        gender_list, _ = self.fit_transform()
-        tri_matrix = [[[1 if word in referential else 0 for word in sub_list] for sub_list in gender_list] for
-                      referential in
-                      gender_list]
-        final_list = []
-        for two_matrix in tri_matrix:
-            sum_list = []
-            for internal_list in two_matrix:
-                soma = 0
-                for values in internal_list:
-                    soma += values
-                sum_list.append(soma)
-            final_list.append(sum_list)
-        print(final_list)
-        return final_list
-
 
 if __name__ == '__main__':
-    DataProcessing().fit_transform()
+    DataProcessing().ep()
