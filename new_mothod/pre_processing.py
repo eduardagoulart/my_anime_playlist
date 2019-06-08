@@ -58,14 +58,6 @@ class DataProcessing:
                 except:
                     eps[i] = (id_anime[i], 0)
 
-        # occurrence = {}
-        # for i in standard:
-        #     occurrence[i] = standard.count(i)
-
-        # occurrence = [occurrence[i] for i in occurrence.keys()]
-
-        # plt.plot(standard)
-        # plt.show()
         class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
 
         for i in eps.keys():
@@ -84,13 +76,15 @@ class DataProcessing:
 
     def grades(self):
         grade = self.file['rating']
-        id_anime = self.id_anime()
+        id_anime = self.file['anime_id']
+        _, valid_animes = self.fit_transform()
         ranking = {}
         for i in range(0, len(grade)):
-            try:
-                ranking[i] = (id_anime[i], int(grade[i]))
-            except:
-                ranking[i] = (id_anime[i], 0)
+            if id_anime[i] in valid_animes:
+                try:
+                    ranking[i] = (id_anime[i], int(grade[i]))
+                except:
+                    ranking[i] = (id_anime[i], 0)
 
         class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
 
@@ -110,27 +104,34 @@ class DataProcessing:
 
     def members(self):
         members = self.file["members"]
+        id_anime = self.file['anime_id']
+        _, valid_animes = self.fit_transform()
+        members_qtd = {}
+        for i in range(0, len(members)):
+            if id_anime[i] in valid_animes:
+                members_qtd[i] = (id_anime[i], members[i])
 
         class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
 
-        for i in members.keys():
-            if 5 <= members[i] <= 1000:
-                class_division[1].append(members[i])
-            elif 1000 < members[i] <= 50000:
-                class_division[2].append(members[i])
-            elif 50000 < members[i] <= 100000:
-                class_division[3].append(members[i])
-            elif 100000 < members[i] <= 500000:
-                class_division[4].append(members[i])
+        for i in members_qtd.keys():
+            if 5 <= members_qtd[i][1] <= 1000:
+                class_division[1].append(members_qtd[i])
+            elif 1000 < members_qtd[i][1] <= 50000:
+                class_division[2].append(members_qtd[i])
+            elif 50000 < members_qtd[i][1] <= 100000:
+                class_division[3].append(members_qtd[i])
+            elif 100000 < members_qtd[i][1] <= 500000:
+                class_division[4].append(members_qtd[i])
             else:
-                class_division[5].append(members[i])
+                class_division[5].append(members_qtd[i])
 
-        plt.plot(members)
-        plt.ylabel("Quantidade de membros")
-        plt.xlabel("Quantidade de animes")
-        plt.show()
+        # plt.plot(members)
+        # plt.ylabel("Quantidade de membros")
+        # plt.xlabel("Quantidade de animes")
+        # plt.show()
+        print(class_division)
         return class_division
 
 
 if __name__ == '__main__':
-    DataProcessing().ep()
+    DataProcessing().members()
