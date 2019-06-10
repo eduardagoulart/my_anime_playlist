@@ -7,42 +7,71 @@ class DataProcessing:
 
     def __init__(self):
         self.file = pd.read_csv("anime.csv")
+        self.test = pd.read_csv("teste.csv")
 
-    def fit_transform(self):
-        gender = self.file["genre"]
-        id_anime = self.file["anime_id"]
+    def anime_validation(self):
+        gender = self.test["genre"]
+        id_anime = self.test["anime_id"]
         values = gender.copy().tolist()
         list_gender = []
         for i in range(0, len(values)):
             try:
-                list_gender.append((id_anime[i], values[i].split(",")))
+                list_gender.append((id_anime[i], gender[i].split(",")))
             except:
                 pass
 
-        return [[(value[0], va.replace(" ", "")) for va in value[1]] for value in list_gender], [value[0] for value in
-                                                                                                 list_gender]
+        return [value[0] for value in list_gender]
 
     # @TODO: testar a saída dessa função: killed
     def genders(self):
-        gender_list, _ = self.fit_transform()
-        tri_matrix = [[[1 if word in referential else 0 for word in sub_list] for sub_list in gender_list] for
-                      referential in
-                      gender_list]
-        final_list = []
-        for two_matrix in tri_matrix:
-            sum_list = []
-            for internal_list in two_matrix:
+        valid_animes = self.anime_validation()
+        gender = self.test["genre"]
+        id_anime = self.test["anime_id"]
+
+        gender_id = [(id_anime[i], gender[i].split(",")) for i in range(0, len(gender)) if id_anime[i] in valid_animes]
+        list_gender = [gender[i].split(",") for i in range(0, len(gender)) if id_anime[i] in valid_animes]
+        gender_id = [[(value[0], va.replace(" ", "")) for va in value[1]] for value in gender_id]
+        list_gender = [[va.replace(" ", "") for va in value] for value in list_gender]
+        
+        tri_matrix = [[[1 if word in referential else 0 for word in sub_list] for sub_list in list_gender] for
+                      referential in list_gender]
+
+        final_list = {}
+        for i in range(0, len(tri_matrix)):
+            final_list[id_anime[i]] = []
+            for j in range(0, len(tri_matrix[i])):
                 soma = 0
-                for values in internal_list:
-                    soma += values
-                sum_list.append(soma)
-            final_list.append(sum_list)
+                for k in range(0, len(tri_matrix[i][j])):
+                    soma += tri_matrix[i][j][k]
+                if id_anime[j] in valid_animes:
+                    final_list[id_anime[i]].append((id_anime[j], soma))
         print(final_list)
-        return final_list
+        print(max(final_list[30413]))
+        '''
+        
+        
+        
+        final_list = [(gender_list[i][0], sum_value[i]) for i in range(0, len(final_list))]
+
+        class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
+
+        for i in eps.keys():
+            if 0 <= eps[i][1] <= 50:
+                class_division[1].append(eps[i])
+            elif 51 <= eps[i][1] <= 110:
+                class_division[2].append(eps[i])
+            elif 111 <= eps[i][1] <= 800:
+                class_division[3].append(eps[i])
+            elif 801 <= eps[i][1] <= 1200:
+                class_division[4].append(eps[i])
+            else:
+                class_division[5].append(eps[i])
+        print(class_division)
+        return final_list'''
 
     # @TODO: analisar se esta informação é útil e como testar
     def anime_type(self):
-        types = self.file["type"]
+        types = self.test["type"]
         types = [[1 if referential == video_type else 0 for referential in types] for video_type in types]
         return types
 
@@ -75,8 +104,8 @@ class DataProcessing:
         return class_division
 
     def grades(self):
-        grade = self.file['rating']
-        id_anime = self.file['anime_id']
+        grade = self.test['rating']
+        id_anime = self.test['anime_id']
         _, valid_animes = self.fit_transform()
         ranking = {}
         for i in range(0, len(grade)):
@@ -103,8 +132,8 @@ class DataProcessing:
         return class_division
 
     def members(self):
-        members = self.file["members"]
-        id_anime = self.file['anime_id']
+        members = self.test["members"]
+        id_anime = self.test['anime_id']
         _, valid_animes = self.fit_transform()
         members_qtd = {}
         for i in range(0, len(members)):
@@ -134,4 +163,4 @@ class DataProcessing:
 
 
 if __name__ == '__main__':
-    DataProcessing().members()
+    DataProcessing().genders()
