@@ -22,7 +22,6 @@ class DataProcessing:
 
         return [value[0] for value in list_gender]
 
-    # @TODO: testar a saída dessa função: killed
     def genders(self):
         valid_animes = self.anime_validation()
         gender = self.test["genre"]
@@ -73,7 +72,7 @@ class DataProcessing:
     def ep(self):
         episodes = self.file["episodes"]
         id_anime = self.file["anime_id"]
-        _, valid_animes = self.fit_transform()
+        valid_animes = self.anime_validation()
         eps = {}
         for i in range(0, len(episodes)):
             if id_anime[i] in valid_animes:
@@ -101,7 +100,7 @@ class DataProcessing:
     def grades(self):
         grade = self.test['rating']
         id_anime = self.test['anime_id']
-        _, valid_animes = self.fit_transform()
+        valid_animes = self.anime_validation()
         ranking = {}
         for i in range(0, len(grade)):
             if id_anime[i] in valid_animes:
@@ -129,33 +128,33 @@ class DataProcessing:
     def members(self):
         members = self.test["members"]
         id_anime = self.test['anime_id']
-        _, valid_animes = self.fit_transform()
+        valid_animes = self.anime_validation()
         members_qtd = {}
         for i in range(0, len(members)):
             if id_anime[i] in valid_animes:
                 members_qtd[i] = (id_anime[i], members[i])
 
-        class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
+        class_division = [[], [], [], [], []]
 
         for i in members_qtd.keys():
             if 5 <= members_qtd[i][1] <= 1000:
-                class_division[1].append(members_qtd[i])
+                class_division[0].append(members_qtd[i])
             elif 1000 < members_qtd[i][1] <= 50000:
-                class_division[2].append(members_qtd[i])
+                class_division[1].append(members_qtd[i])
             elif 50000 < members_qtd[i][1] <= 100000:
-                class_division[3].append(members_qtd[i])
+                class_division[2].append(members_qtd[i])
             elif 100000 < members_qtd[i][1] <= 500000:
-                class_division[4].append(members_qtd[i])
+                class_division[3].append(members_qtd[i])
             else:
-                class_division[5].append(members_qtd[i])
+                class_division[4].append(members_qtd[i])
 
-        # plt.plot(members)
-        # plt.ylabel("Quantidade de membros")
-        # plt.xlabel("Quantidade de animes")
-        # plt.show()
-        print(class_division)
+        self.distance_between(class_division)
         return class_division
+
+    @staticmethod
+    def distance_between(class_division):
+        print(class_division)
 
 
 if __name__ == '__main__':
-    DataProcessing().genders()
+    DataProcessing().members()
