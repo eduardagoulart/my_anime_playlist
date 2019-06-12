@@ -7,13 +7,13 @@ type_animes = obj.anime_type()
 qt_ep = obj.ep()
 grades = obj.rating()
 num_members = obj.members()
-gender = obj.normalize_gender().copy()
+gender = obj.gender()
 id_anime = obj.id_anime()
-'''
+
 nodes = open('nodes.txt', 'w')
 for i in id_anime:
     nodes.write(str(i))
-    nodes.write('\n')'''
+    nodes.write('\n')
 
 
 def cosine_distance(v, w):
@@ -36,24 +36,16 @@ def type_gender():
 
 
 def all_values():
-    gender_type, mem_ep_rating = type_gender(), ep_mem_rating()
-    final_matrix = [[gender_type[i][j] + mem_ep_rating[i][j] for j in range(0, len(gender_type[i]))] for i in
-                    range(0, len(gender_type))]
+    mem_ep_rating = ep_mem_rating()
+    final_matrix = [[type_animes[i][j] + gender[i][j] + mem_ep_rating[i][j] for j in range(0, len(gender[i]))] for i in
+                    range(0, len(gender))]
     max_value_list = [max(i) for i in final_matrix]
     max_value = max(max_value_list)
     return [[j / max_value for j in final_matrix[i]] for i in range(0, len(final_matrix))]
 
 
-print(all_values())
-
-
-def all_values_with_id():
-    values = all_values()
-    return add_id_matrix(values)
-
-
 def write_file_weigth_matrix():
-    values = all_values_with_id()
+    values = add_id_matrix(all_values())
     # print(values)
     # values = type_gender_id()
 
@@ -65,10 +57,12 @@ def write_file_weigth_matrix():
                 weight.write(t)
                 weight.write('\n')
 
-        '''weight.write(str(values[ref][ref][0]))
+            '''weight.write(str(values[ref][ref][0]))
             weight.write(" ")
             weight.write(str(ultimo[0]))
             weight.write(str(" "))
             weight.write(str(ultimo[1]))
             weight.write("\n")'''
     weight.close()
+
+write_file_weigth_matrix()
