@@ -1,5 +1,6 @@
 from pre_processing import DataProcessing
 import numpy as np
+from scipy.spatial import distance
 
 obj = DataProcessing()
 type_animes = obj.anime_type()
@@ -21,17 +22,7 @@ def cosine_distance(v, w):
 
 def ep_mem_rating():
     anime_value = [[qt_ep[i], num_members[i], grades[i]] for i in range(0, len(qt_ep))]
-    anime_distance = [[cosine_distance(ref, actual) for actual in anime_value] for ref in anime_value]
-    print(anime_value)
-
-
-ep_mem_rating()
-'''------------------------------ MATRIX -----------------------------------------------------------'''
-
-
-def normalize_matrix(sum_values):
-    max_value_list = [max(i) for i in sum_values]
-    return [[j / max_value_list[i] for j in sum_values[i]] for i in range(0, len(sum_values))]
+    return [[1 - distance.cosine(ref, actual) for actual in anime_value] for ref in anime_value]
 
 
 def add_id_matrix(list_values):
@@ -44,18 +35,16 @@ def type_gender():
             range(0, len(type_animes))]
 
 
-def type_gender_id():
-    values = type_gender()
-    return add_id_matrix(values)
-
-
 def all_values():
-    matrix, list_values = type_gender(), ep_rating_member()
-    final_matrix = [[internal_list[i] + list_values[i] for i in range(0, len(internal_list))] for internal_list in
-                    matrix]
+    gender_type, mem_ep_rating = type_gender(), ep_mem_rating()
+    final_matrix = [[gender_type[i][j] + mem_ep_rating[i][j] for j in range(0, len(gender_type[i]))] for i in
+                    range(0, len(gender_type))]
     max_value_list = [max(i) for i in final_matrix]
     max_value = max(max_value_list)
     return [[j / max_value for j in final_matrix[i]] for i in range(0, len(final_matrix))]
+
+
+print(all_values())
 
 
 def all_values_with_id():

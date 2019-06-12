@@ -25,7 +25,7 @@ class DataProcessing:
         return [value[0] for value in list_gender]
 
     def ep(self):
-        episodes = self.file["episodes"]
+        episodes = self.teste["episodes"]
         episodes = episodes.copy()
         for i in range(0, len(episodes)):
             try:
@@ -33,21 +33,21 @@ class DataProcessing:
             except:
                 episodes[i] = 0
         standard = episodes.tolist()
-        max_value = max(standard)
-        return [value / max_value for value in episodes]
+        # max_value = max(standard)
+        return standard
 
     def rating(self):
-        grade = self.file['rating']
+        grade = self.teste['rating']
         ranking = grade.copy().tolist()
         max_value = max(ranking)
-        ranking = [value / max_value for value in grade]
+        # ranking = [value / max_value for value in grade]
         return [0 if math.isnan(value) else value for value in ranking]
 
     def members(self):
-        members = self.file["members"]
+        members = self.teste["members"]
         popularity = members.copy().tolist()
         max_value = max(popularity)
-        return [value / max_value for value in members]
+        return popularity
 
     def fit_transform(self):
         gender = self.teste["genre"]
