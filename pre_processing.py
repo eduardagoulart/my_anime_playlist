@@ -9,17 +9,20 @@ class DataProcessing:
         self.teste = pd.read_csv("base_teste.csv")
 
     def id_anime(self):
-        return self.file["anime_id"]
+        return self.teste["anime_id"]
 
-    @staticmethod
-    def cosine_distance(v, w):
-        return np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w))
+    def anime_validation(self):
+        gender = self.teste["genre"]
+        id_anime = self.id_anime()
+        values = gender.copy().tolist()
+        list_gender = []
+        for i in range(0, len(values)):
+            try:
+                list_gender.append((id_anime[i], gender[i].split(",")))
+            except:
+                pass
 
-    def anime_type(self):
-        types = self.teste["type"]
-        print(types[5])
-        types = [[1 if referential == video_type else 0 for referential in types] for video_type in types]
-        return types
+        return [value[0] for value in list_gender]
 
     def ep(self):
         episodes = self.file["episodes"]
@@ -30,16 +33,13 @@ class DataProcessing:
             except:
                 episodes[i] = 0
         standard = episodes.tolist()
-        standard.sort(reverse=True)
-        max_value = standard[0]
-        standard = [value / max_value for value in episodes]
-        return standard
+        max_value = max(standard)
+        return [value / max_value for value in episodes]
 
-    def grades(self):
+    def rating(self):
         grade = self.file['rating']
         ranking = grade.copy().tolist()
-        ranking.sort(reverse=True)
-        max_value = ranking[0]
+        max_value = max(ranking)
         ranking = [value / max_value for value in grade]
         return [0 if math.isnan(value) else value for value in ranking]
 
@@ -47,9 +47,7 @@ class DataProcessing:
         members = self.file["members"]
         popularity = members.copy().tolist()
         max_value = max(popularity)
-        popularity = [value / max_value for value in members]
-        print(popularity)
-        return popularity
+        return [value / max_value for value in members]
 
     def fit_transform(self):
         gender = self.teste["genre"]
@@ -78,6 +76,12 @@ class DataProcessing:
         max_value = max(list_max)
         return [[matrix[i][j] / max_value for j in range(0, len(matrix[i]))] for i in range(0, len(matrix))]
 
+    def anime_type(self):
+        types = self.teste["type"]
+        types = [[1 if referential == video_type else 0 for referential in types] for video_type in types]
+        return types
+
 
 if __name__ == '__main__':
-    DataProcessing().members()
+    obj = DataProcessing()
+    print(obj.rating())

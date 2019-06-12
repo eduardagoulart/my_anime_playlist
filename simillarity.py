@@ -1,46 +1,31 @@
 from pre_processing import DataProcessing
+import numpy as np
 
 obj = DataProcessing()
 type_animes = obj.anime_type()
 qt_ep = obj.ep()
-grades = obj.grades()
+grades = obj.rating()
 num_members = obj.members()
 gender = obj.normalize_gender().copy()
 id_anime = obj.id_anime()
-
+'''
 nodes = open('nodes.txt', 'w')
 for i in id_anime:
     nodes.write(str(i))
-    nodes.write('\n')
+    nodes.write('\n')'''
 
 
-def normalize_list(sum_values):
-    max_value = max(sum_values)
-    return [i / max_value for i in sum_values]
+def cosine_distance(v, w):
+    return np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w))
 
 
-def add_id_list(list_values):
-    return [[int(id_anime[i]), list_values[i]] for i in range(0, len(list_values))]
+def ep_mem_rating():
+    anime_value = [[qt_ep[i], num_members[i], grades[i]] for i in range(0, len(qt_ep))]
+    anime_distance = [[cosine_distance(ref, actual) for actual in anime_value] for ref in anime_value]
+    print(anime_value)
 
 
-def ep_rating_member():
-    return [qt_ep[i] + grades[i] + num_members[i] for i in range(0, len(num_members))]
-
-
-def ep_rating():
-    return [qt_ep[i] + grades[i] for i in range(0, len(num_members))]
-
-
-def ep_member():
-    sum_values = [qt_ep[i] + num_members[i] for i in range(0, len(num_members))]
-    return add_id_list(normalize_list(sum_values))
-
-
-def rating_member():
-    sum_values = [grades[i] + num_members[i] for i in range(0, len(num_members))]
-    return add_id_list(normalize_list(sum_values))
-
-
+ep_mem_rating()
 '''------------------------------ MATRIX -----------------------------------------------------------'''
 
 
@@ -90,7 +75,7 @@ def write_file_weigth_matrix():
                 t = f'{str(values[ref][ref][0]): <6}{str(ultimo[0]): <6}1'
                 weight.write(t)
                 weight.write('\n')
-            
+
         '''weight.write(str(values[ref][ref][0]))
             weight.write(" ")
             weight.write(str(ultimo[0]))
@@ -98,7 +83,3 @@ def write_file_weigth_matrix():
             weight.write(str(ultimo[1]))
             weight.write("\n")'''
     weight.close()
-
-
-if __name__ == '__main__':
-    write_file_weigth_matrix()
