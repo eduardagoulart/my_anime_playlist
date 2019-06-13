@@ -124,6 +124,9 @@ class DataProcessing:
             if id_anime[i] in valid_animes:
                 members_qtd[i] = (id_anime[i], members[i])
 
+        class_size = self.sturger(members_qtd.keys())
+        print(len(members_qtd.keys()))
+        print(class_size)
         class_division = [[], [], [], [], []]
 
         for i in members_qtd.keys():
@@ -138,7 +141,6 @@ class DataProcessing:
             else:
                 class_division[4].append(members_qtd[i])
 
-        self.distance_between(class_division)
         return class_division
 
 
