@@ -9,6 +9,14 @@ class DataProcessing:
         self.file = pd.read_csv("anime.csv")
         self.test = pd.read_csv("teste.csv")
 
+    @staticmethod
+    def sturger(list_values):
+        return 1 + 3.3 * np.log10(len(list_values))
+
+    @staticmethod
+    def amplitute(first, last, sturges_size):
+        return (first - last) / sturges_size
+
     def anime_validation(self):
         gender = self.test["genre"]
         id_anime = self.test["anime_id"]
@@ -27,10 +35,7 @@ class DataProcessing:
         gender = self.test["genre"]
         id_anime = self.test["anime_id"]
 
-        # gender_id = [(id_anime[i], gender[i].split(",")) for i in range(0, len(gender)) if id_anime[i]
-        # in valid_animes]
         list_gender = [gender[i].split(",") for i in range(0, len(gender)) if id_anime[i] in valid_animes]
-        # gender_id = [[(value[0], va.replace(" ", "")) for va in value[1]] for value in gender_id]
         list_gender = [[va.replace(" ", "") for va in value] for value in list_gender]
 
         tri_matrix = [[[1 if word in referential else 0 for word in sub_list] for sub_list in list_gender] for
@@ -46,22 +51,7 @@ class DataProcessing:
                 if id_anime[j] in valid_animes:
                     final_list[id_anime[i]].append((id_anime[j], soma))
 
-        class_division = {}
-        for i in final_list.keys():
-            class_division[i] = {1: [], 2: [], 3: [], 4: [], 5: []}
-            for j in final_list[i]:
-                if 0 <= j[1] <= 2:
-                    class_division[i][1].append(j)
-                elif 2 < j[1] <= 4:
-                    class_division[i][2].append(j)
-                elif 4 < j[1] <= 6:
-                    class_division[i][3].append(j)
-                elif 6 < j[1] <= 8:
-                    class_division[i][4].append(j)
-                else:
-                    class_division[i][5].append(j)
-
-        return class_division
+        return final_list
 
     # @TODO: analisar se esta informação é útil e como testar
     def anime_type(self):
@@ -150,10 +140,6 @@ class DataProcessing:
 
         self.distance_between(class_division)
         return class_division
-
-    @staticmethod
-    def distance_between(class_division):
-        print(class_division)
 
 
 if __name__ == '__main__':
