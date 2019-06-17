@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+import math
 
 
 class DataProcessing:
@@ -15,7 +15,11 @@ class DataProcessing:
 
     @staticmethod
     def amplitute(first, last, sturges_size):
-        return (first - last) / sturges_size
+        return (last - first) / sturges_size
+
+    @staticmethod
+    def round_values(value):
+        return math.ceil(value)
 
     def anime_validation(self):
         gender = self.test["genre"]
@@ -119,14 +123,18 @@ class DataProcessing:
         members = self.test["members"]
         id_anime = self.test['anime_id']
         valid_animes = self.anime_validation()
-        members_qtd = {}
+        members_qtd = []
         for i in range(0, len(members)):
             if id_anime[i] in valid_animes:
-                members_qtd[i] = (id_anime[i], members[i])
+                members_qtd.append((id_anime[i], members[i]))
 
-        class_size = self.sturger(members_qtd.keys())
-        print(len(members_qtd.keys()))
+        qt_class = self.sturger(members_qtd)
+        qt_class = self.round_values(qt_class)
+
+        members_qtd.sort(key=lambda x: x[1])
+        class_size = self.amplitute(members_qtd[0][1], members_qtd[-1][1], qt_class)
         print(class_size)
+        # print(class_size)
         class_division = [[], [], [], [], []]
 
         for i in members_qtd.keys():
