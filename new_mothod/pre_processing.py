@@ -10,16 +10,8 @@ class DataProcessing:
         self.test = pd.read_csv("teste.csv")
 
     @staticmethod
-    def sturger(list_values):
-        return 1 + 3.3 * np.log10(len(list_values))
-
-    @staticmethod
-    def amplitute(first, last, sturges_size):
+    def amplitute(first, last, sturges_size=5):
         return (last - first) / sturges_size
-
-    @staticmethod
-    def round_values(value):
-        return math.ceil(value)
 
     def anime_validation(self):
         gender = self.test["genre"]
@@ -128,26 +120,23 @@ class DataProcessing:
             if id_anime[i] in valid_animes:
                 members_qtd.append((id_anime[i], members[i]))
 
-        qt_class = self.sturger(members_qtd)
-        qt_class = self.round_values(qt_class)
-
         members_qtd.sort(key=lambda x: x[1])
-        class_size = self.amplitute(members_qtd[0][1], members_qtd[-1][1], qt_class)
-        print(class_size)
-        # print(class_size)
-        class_division = [[], [], [], [], []]
+        class_size = self.amplitute(members_qtd[0][1], members_qtd[-1][1])
+        lower_value = members_qtd[0][1]
 
-        for i in members_qtd.keys():
-            if 5 <= members_qtd[i][1] <= 1000:
-                class_division[0].append(members_qtd[i])
-            elif 1000 < members_qtd[i][1] <= 50000:
-                class_division[1].append(members_qtd[i])
-            elif 50000 < members_qtd[i][1] <= 100000:
-                class_division[2].append(members_qtd[i])
-            elif 100000 < members_qtd[i][1] <= 500000:
-                class_division[3].append(members_qtd[i])
-            else:
-                class_division[4].append(members_qtd[i])
+        class_division = []
+
+        for i in members_qtd:
+            if lower_value <= i[1] <= lower_value + class_size:
+                class_division.append((i[0], 1))
+            elif lower_value + class_size < i[1] <= lower_value + (class_size * 2):
+                class_division.append((i[0], 2))
+            elif lower_value + (class_size * 2) < i[1] <= lower_value + (class_size * 3):
+                class_division.append((i[0], 3))
+            elif lower_value + (class_size * 3) < i[1] <= lower_value + (class_size * 4):
+                class_division.append((i[0], 4))
+            elif lower_value + (class_size * 4) < i[1] <= lower_value + (class_size * 5):
+                class_division.append((i[0], 5))
 
         return class_division
 
