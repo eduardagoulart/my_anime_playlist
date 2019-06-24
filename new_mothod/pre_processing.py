@@ -59,29 +59,17 @@ class DataProcessing:
         episodes = self.file["episodes"]
         id_anime = self.file["anime_id"]
         valid_animes = self.anime_validation()
-        eps = {}
+        eps = []
         for i in range(0, len(episodes)):
             if id_anime[i] in valid_animes:
                 try:
-                    eps[i] = (id_anime[i], int(episodes[i]))
+                    eps.append((id_anime[i], int(episodes[i])))
                 except:
-                    eps[i] = (id_anime[i], 0)
+                    eps.append((id_anime[i], 0))
 
-        class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
+        print(self.similarity_all_for_all(self.discretization(eps)))
 
-        for i in eps.keys():
-            if 0 <= eps[i][1] <= 50:
-                class_division[1].append(eps[i])
-            elif 51 <= eps[i][1] <= 110:
-                class_division[2].append(eps[i])
-            elif 111 <= eps[i][1] <= 800:
-                class_division[3].append(eps[i])
-            elif 801 <= eps[i][1] <= 1200:
-                class_division[4].append(eps[i])
-            else:
-                class_division[5].append(eps[i])
-        print(class_division)
-        return class_division
+        return
 
     def grades(self):
         grade = self.test['rating']
@@ -94,7 +82,7 @@ class DataProcessing:
                     ranking.append((id_anime[i], int(grade[i])))
                 except:
                     ranking.append((id_anime[i], 0))
-                    
+
         return self.similarity_all_for_all(self.discretization(ranking))
 
     def members(self):
@@ -134,4 +122,4 @@ class DataProcessing:
 
 
 if __name__ == '__main__':
-    DataProcessing().grades()
+    DataProcessing().ep()
