@@ -137,8 +137,12 @@ class DataProcessing:
                 class_division.append((i[0], 4))
             elif lower_value + (class_size * 4) < i[1] <= lower_value + (class_size * 5):
                 class_division.append((i[0], 5))
+                
+        return self.similarity_all_for_all(class_division)
 
-        return class_division
+    @staticmethod
+    def similarity_all_for_all(matrix):
+        return [[(j[0], round(1 - ((abs(i[1] - j[1])) / 5), 2)) for j in matrix] for i in matrix]
 
 
 if __name__ == '__main__':
