@@ -87,29 +87,15 @@ class DataProcessing:
         grade = self.test['rating']
         id_anime = self.test['anime_id']
         valid_animes = self.anime_validation()
-        ranking = {}
+        ranking = []
         for i in range(0, len(grade)):
             if id_anime[i] in valid_animes:
                 try:
-                    ranking[i] = (id_anime[i], int(grade[i]))
+                    ranking.append((id_anime[i], int(grade[i])))
                 except:
-                    ranking[i] = (id_anime[i], 0)
-
-        class_division = {1: [], 2: [], 3: [], 4: [], 5: []}
-
-        for i in ranking.keys():
-            if 0 <= ranking[i][1] <= 2:
-                class_division[1].append(ranking[i])
-            elif 2 < ranking[i][1] <= 4:
-                class_division[2].append(ranking[i])
-            elif 4 < ranking[i][1] <= 6:
-                class_division[3].append(ranking[i])
-            elif 6 < ranking[i][1] <= 8:
-                class_division[4].append(ranking[i])
-            elif 8 < ranking[i][1] <= 10:
-                class_division[5].append(ranking[i])
-        print(class_division)
-        return class_division
+                    ranking.append((id_anime[i], 0))
+                    
+        return self.similarity_all_for_all(self.discretization(ranking))
 
     def members(self):
         members = self.test["members"]
@@ -120,13 +106,15 @@ class DataProcessing:
             if id_anime[i] in valid_animes:
                 members_qtd.append((id_anime[i], members[i]))
 
-        members_qtd.sort(key=lambda x: x[1])
-        class_size = self.amplitute(members_qtd[0][1], members_qtd[-1][1])
-        lower_value = members_qtd[0][1]
+        return self.similarity_all_for_all(self.discretization(members_qtd))
 
+    def discretization(self, all_values):
+        all_values.sort(key=lambda x: x[1])
+        class_size = self.amplitute(all_values[0][1], all_values[-1][1])
+        lower_value = all_values[0][1]
         class_division = []
 
-        for i in members_qtd:
+        for i in all_values:
             if lower_value <= i[1] <= lower_value + class_size:
                 class_division.append((i[0], 1))
             elif lower_value + class_size < i[1] <= lower_value + (class_size * 2):
@@ -137,8 +125,8 @@ class DataProcessing:
                 class_division.append((i[0], 4))
             elif lower_value + (class_size * 4) < i[1] <= lower_value + (class_size * 5):
                 class_division.append((i[0], 5))
-                
-        return self.similarity_all_for_all(class_division)
+
+        return class_division
 
     @staticmethod
     def similarity_all_for_all(matrix):
@@ -146,4 +134,4 @@ class DataProcessing:
 
 
 if __name__ == '__main__':
-    DataProcessing().members()
+    DataProcessing().grades()
