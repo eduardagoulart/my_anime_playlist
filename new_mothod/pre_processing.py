@@ -10,6 +10,10 @@ class DataProcessing:
         self.test = pd.read_csv("teste.csv")
 
     @staticmethod
+    def sort_tuple(list_tuple):
+        return list_tuple.sort(key=lambda tup: tup[0])
+
+    @staticmethod
     def amplitute(first, last, sturges_size=5):
         return (last - first) / sturges_size
 
@@ -37,27 +41,21 @@ class DataProcessing:
         tri_matrix = [[[1 if word in referential else 0 for word in sub_list] for sub_list in list_gender] for
                       referential in list_gender]
 
-        final_list = {}
-        for i in range(0, len(tri_matrix)):
-            final_list[id_anime[i]] = []
-            for j in range(0, len(tri_matrix[i])):
-                soma = 0
-                for k in range(0, len(tri_matrix[i][j])):
-                    soma += tri_matrix[i][j][k]
-                if id_anime[j] in valid_animes:
-                    final_list[id_anime[i]].append((id_anime[j], soma))
+        final_list = [[(id_anime[j], sum(i[j])) for j in range(0, len(i)) if id_anime[j] in valid_animes] for i in
+                      tri_matrix]
 
         return final_list
 
-    # @TODO: analisar se esta informação é útil e como testar
     def anime_type(self):
         types = self.test["type"]
-        types = [[1 if referential == video_type else 0 for referential in types] for video_type in types]
+        id_anime = self.test["anime_id"]
+        valid_animes = self.anime_validation()
+        types = [[(id_anime[i], 1) if types[i] == video_type else (id_anime[i] ,0) for i in range(0, len(types)) if id_anime[i] in valid_animes] for video_type in types]
         return types
 
     def ep(self):
-        episodes = self.file["episodes"]
-        id_anime = self.file["anime_id"]
+        episodes = self.test["episodes"]
+        id_anime = self.test["anime_id"]
         valid_animes = self.anime_validation()
         eps = []
         for i in range(0, len(episodes)):
@@ -67,9 +65,7 @@ class DataProcessing:
                 except:
                     eps.append((id_anime[i], 0))
 
-        print(self.similarity_all_for_all(self.discretization(eps)))
-
-        return
+        return self.sort_tuple(self.similarity_all_for_all(self.discretization(eps)))
 
     def grades(self):
         grade = self.test['rating']
@@ -120,6 +116,16 @@ class DataProcessing:
     def similarity_all_for_all(matrix):
         return [[(j[0], round(1 - ((abs(i[1] - j[1])) / 5), 2)) for j in matrix] for i in matrix]
 
+    def sum_matrix(self):
+        types = self.anime_type()
+        gend = self.genders()
+        eps = self.ep()
+        membs = self.members()
+        rating = self.grades()
+        print(types[0])
+        # return [[types[i][j] + gend[i][j] + eps[i][j] + membs[i][j] + rating[i][j] for j in range(0, len(types[i]))] for
+        #        i in range(0, len(types))]
+
 
 if __name__ == '__main__':
-    DataProcessing().ep()
+    DataProcessing().sum_matrix()
