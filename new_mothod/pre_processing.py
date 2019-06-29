@@ -10,12 +10,12 @@ class DataProcessing:
         self.test = pd.read_csv("teste.csv")
 
     @staticmethod
-    def sort_tuple(list_tuple):
-        return list_tuple.sort(key=lambda tup: tup[0])
-
-    @staticmethod
     def amplitute(first, last, sturges_size=5):
         return (last - first) / sturges_size
+
+    @staticmethod
+    def max_tuple(list_tuple):
+        return max(list_tuple, key=lambda item: item[1])
 
     def anime_validation(self):
         gender = self.test["genre"]
@@ -44,7 +44,10 @@ class DataProcessing:
         final_list = [[(id_anime[j], sum(i[j])) for j in range(0, len(i)) if id_anime[j] in valid_animes] for i in
                       tri_matrix]
 
-        return final_list
+        max_in_list = [self.max_tuple(i) for i in final_list]
+        max_gender = self.max_tuple(max_in_list)
+
+        return [[(j[0], j[1] / max_gender[1]) for j in i] for i in final_list]
 
     def anime_type(self):
         types = self.test["type"]
@@ -66,7 +69,7 @@ class DataProcessing:
                 except:
                     eps.append((id_anime[i], 0))
 
-        return self.sort_tuple(self.similarity_all_for_all(self.discretization(eps)))
+        return self.similarity_all_for_all(self.discretization(eps))
 
     def grades(self):
         grade = self.test['rating']
@@ -125,13 +128,9 @@ class DataProcessing:
         eps = self.ep()
         membs = self.members()
         rating = self.grades()
-        print(eps)
-        # sum_matrix = [
-        #     [(gend[i][j][0], types[i][j][1] + gend[i][j][1] + eps[i][j][1] + membs[i][j][1] + rating[i][j][1]) for j in
-        #      range(0, len(types[i]))] for i in range(0, len(types))]
-        # print(sum_matrix)
-        # return [[types[i][j] + gend[i][j] + eps[i][j] + membs[i][j] + rating[i][j] for j in range(0, len(types[i]))] for
-        #        i in range(0, len(types))]
+        return [
+            [(gend[i][j][0], round(types[i][j][1] + gend[i][j][1] + eps[i][j][1] + membs[i][j][1] + rating[i][j][1], 2))
+             for j in range(0, len(types[i]))] for i in range(0, len(types))]
 
 
 if __name__ == '__main__':
