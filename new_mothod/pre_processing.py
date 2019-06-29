@@ -50,7 +50,8 @@ class DataProcessing:
         types = self.test["type"]
         id_anime = self.test["anime_id"]
         valid_animes = self.anime_validation()
-        types = [[(id_anime[i], 1) if types[i] == video_type else (id_anime[i] ,0) for i in range(0, len(types)) if id_anime[i] in valid_animes] for video_type in types]
+        types = [[(id_anime[i], 1) if types[i] == video_type else (id_anime[i], 0) for i in range(0, len(types)) if
+                  id_anime[i] in valid_animes] for video_type in types]
         return types
 
     def ep(self):
@@ -89,16 +90,19 @@ class DataProcessing:
         for i in range(0, len(members)):
             if id_anime[i] in valid_animes:
                 members_qtd.append((id_anime[i], members[i]))
+        # print(self.discretization(members_qtd))
+        # print('edda funca')
 
         return self.similarity_all_for_all(self.discretization(members_qtd))
 
     def discretization(self, all_values):
+        original_matrix = all_values.copy()
         all_values.sort(key=lambda x: x[1])
         class_size = self.amplitute(all_values[0][1], all_values[-1][1])
         lower_value = all_values[0][1]
         class_division = []
 
-        for i in all_values:
+        for i in original_matrix:
             if lower_value <= i[1] <= lower_value + class_size:
                 class_division.append((i[0], 1))
             elif lower_value + class_size < i[1] <= lower_value + (class_size * 2):
@@ -109,7 +113,6 @@ class DataProcessing:
                 class_division.append((i[0], 4))
             elif lower_value + (class_size * 4) < i[1] <= lower_value + (class_size * 5):
                 class_division.append((i[0], 5))
-
         return class_division
 
     @staticmethod
@@ -122,7 +125,11 @@ class DataProcessing:
         eps = self.ep()
         membs = self.members()
         rating = self.grades()
-        print(types[0])
+        print(eps)
+        # sum_matrix = [
+        #     [(gend[i][j][0], types[i][j][1] + gend[i][j][1] + eps[i][j][1] + membs[i][j][1] + rating[i][j][1]) for j in
+        #      range(0, len(types[i]))] for i in range(0, len(types))]
+        # print(sum_matrix)
         # return [[types[i][j] + gend[i][j] + eps[i][j] + membs[i][j] + rating[i][j] for j in range(0, len(types[i]))] for
         #        i in range(0, len(types))]
 
