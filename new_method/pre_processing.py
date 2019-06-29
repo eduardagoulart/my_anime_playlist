@@ -17,6 +17,11 @@ class DataProcessing:
     def max_tuple(list_tuple):
         return max(list_tuple, key=lambda item: item[1])
 
+    def normalize_matrix(self, matrix):
+        max_in_list = [self.max_tuple(i) for i in matrix]
+        max_value = self.max_tuple(max_in_list)
+        return [[(j[0], round(j[1] / max_value[1], 2)) for j in i] for i in matrix]
+
     def anime_validation(self):
         gender = self.test["genre"]
         id_anime = self.test["anime_id"]
@@ -44,10 +49,7 @@ class DataProcessing:
         final_list = [[(id_anime[j], sum(i[j])) for j in range(0, len(i)) if id_anime[j] in valid_animes] for i in
                       tri_matrix]
 
-        max_in_list = [self.max_tuple(i) for i in final_list]
-        max_gender = self.max_tuple(max_in_list)
-
-        return [[(j[0], j[1] / max_gender[1]) for j in i] for i in final_list]
+        return self.normalize_matrix(final_list)
 
     def anime_type(self):
         types = self.test["type"]
@@ -93,8 +95,6 @@ class DataProcessing:
         for i in range(0, len(members)):
             if id_anime[i] in valid_animes:
                 members_qtd.append((id_anime[i], members[i]))
-        # print(self.discretization(members_qtd))
-        # print('edda funca')
 
         return self.similarity_all_for_all(self.discretization(members_qtd))
 
@@ -128,10 +128,24 @@ class DataProcessing:
         eps = self.ep()
         membs = self.members()
         rating = self.grades()
-        return [
+        matrix_sum = [
             [(gend[i][j][0], round(types[i][j][1] + gend[i][j][1] + eps[i][j][1] + membs[i][j][1] + rating[i][j][1], 2))
              for j in range(0, len(types[i]))] for i in range(0, len(types))]
+        return self.normalize_matrix(matrix_sum)
+
+    def write_file_weigth_matrix(self):
+        values = self.sum_matrix()
+
+        weight = open("sim_matrix.txt", "w")
+        for ref in range(0, len(values)):
+            for ultimo in values[ref]:
+                if ultimo[1] >= 0.9:
+                    t = f'{str(values[ref][ref][0]): <6}{str(ultimo[0]): <6}1'
+                    weight.write(t)
+                    weight.write('\n')
+        weight.close()
 
 
 if __name__ == '__main__':
-    DataProcessing().sum_matrix()
+    obj = DataProcessing()
+    obj.write_file_weigth_matrix()
