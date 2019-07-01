@@ -17,6 +17,10 @@ class DataProcessing:
     def max_tuple(list_tuple):
         return max(list_tuple, key=lambda item: item[1])
 
+    @staticmethod
+    def cosine_distance(v, w):
+        return np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w))
+
     def normalize_matrix(self, matrix):
         max_in_list = [self.max_tuple(i) for i in matrix]
         max_value = self.max_tuple(max_in_list)
@@ -71,7 +75,7 @@ class DataProcessing:
                 except:
                     eps.append((id_anime[i], 0))
 
-        return self.similarity_all_for_all(self.discretization(eps))
+        return eps
 
     def grades(self):
         grade = self.test['rating']
@@ -85,7 +89,7 @@ class DataProcessing:
                 except:
                     ranking.append((id_anime[i], 0))
 
-        return self.similarity_all_for_all(self.discretization(ranking))
+        return ranking
 
     def members(self):
         members = self.test["members"]
@@ -96,7 +100,7 @@ class DataProcessing:
             if id_anime[i] in valid_animes:
                 members_qtd.append((id_anime[i], members[i]))
 
-        return self.similarity_all_for_all(self.discretization(members_qtd))
+        return members_qtd
 
     def discretization(self, all_values):
         original_matrix = all_values.copy()
@@ -122,19 +126,22 @@ class DataProcessing:
     def similarity_all_for_all(matrix):
         return [[(j[0], round(1 - ((abs(i[1] - j[1])) / 5), 2)) for j in matrix] for i in matrix]
 
-    def sum_matrix(self):
+    def sum_matrix_class_disc(self):
         types = self.anime_type()
         gend = self.genders()
-        eps = self.ep()
-        membs = self.members()
-        rating = self.grades()
+        eps = self.similarity_all_for_all(self.discretization(self.ep()))
+        membs = self.similarity_all_for_all(self.discretization(self.members()))
+        rating = self.similarity_all_for_all(self.discretization(self.grades()))
+        return self.sum_matrix(gend, types, eps, membs, rating)
+
+    def sum_matrix(self, gend, types, eps, membs, rating):
         matrix_sum = [
             [(gend[i][j][0], round(types[i][j][1] + gend[i][j][1] + eps[i][j][1] + membs[i][j][1] + rating[i][j][1], 2))
              for j in range(0, len(types[i]))] for i in range(0, len(types))]
         return self.normalize_matrix(matrix_sum)
 
     def write_file_weigth_matrix(self):
-        values = self.sum_matrix()
+        values = self.sum_matrix_class_disc()
 
         weight = open("sim_matrix.txt", "w")
         for ref in range(0, len(values)):
