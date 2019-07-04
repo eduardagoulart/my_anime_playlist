@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import math
 
 
 class DataProcessing:
@@ -19,7 +18,7 @@ class DataProcessing:
 
     @staticmethod
     def cosine_distance(v, w):
-        return np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w))
+        return round(np.dot(v, w) / (np.linalg.norm(v) * np.linalg.norm(w)), 4)
 
     def normalize_matrix(self, matrix):
         max_in_list = [self.max_tuple(i) for i in matrix]
@@ -75,7 +74,7 @@ class DataProcessing:
                 except:
                     eps.append((id_anime[i], 0))
 
-        return eps
+        return self.discretization(eps)
 
     def grades(self):
         grade = self.test['rating']
@@ -89,7 +88,7 @@ class DataProcessing:
                 except:
                     ranking.append((id_anime[i], 0))
 
-        return ranking
+        return self.discretization(ranking)
 
     def members(self):
         members = self.test["members"]
@@ -100,7 +99,7 @@ class DataProcessing:
             if id_anime[i] in valid_animes:
                 members_qtd.append((id_anime[i], members[i]))
 
-        return members_qtd
+        return self.discretization(members_qtd)
 
     def discretization(self, all_values):
         original_matrix = all_values.copy()
@@ -122,6 +121,20 @@ class DataProcessing:
                 class_division.append((i[0], 5))
         return class_division
 
+    def similarity_cosine(self):
+        membs = self.members()
+        eps = self.ep()
+        rating = self.grades()
+        animes = [[membs[i], eps[i], rating[i]] for i in range(0, len(membs))]
+        animes_without_id = [[j[1] for j in i] for i in animes]
+        sim = [[self.cosine_distance(ref, actual) for actual in animes_without_id] for ref in animes_without_id]
+        gender = self.genders()
+        types = self.anime_type()
+        sum_matrix = [
+            [(animes[j][0][0], sim[i][j] + gender[i][j][1] + types[i][j][1]) for j in range(0, len(sim[i]))] for i in
+            range(0, len(sim))]
+        return self.normalize_matrix(sum_matrix)
+
     @staticmethod
     def similarity_all_for_all(matrix):
         return [[(j[0], round(1 - ((abs(i[1] - j[1])) / 5), 2)) for j in matrix] for i in matrix]
@@ -141,9 +154,9 @@ class DataProcessing:
         return self.normalize_matrix(matrix_sum)
 
     def write_file_weigth_matrix(self):
-        values = self.sum_matrix_class_disc()
-
-        weight = open("sim_matrix.txt", "w")
+        # values = self.sum_matrix_class_disc()
+        values = self.similarity_cosine()
+        weight = open("cosine_distance.txt", "w")
         for ref in range(0, len(values)):
             for ultimo in values[ref]:
                 if ultimo[1] >= 0.9:
